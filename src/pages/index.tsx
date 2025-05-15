@@ -9,12 +9,8 @@ import { getAllBooks } from "@/lib/db/books"
 const HomePage = () => {
   return (
     <>
-      <h1 className="text-3xl font-bold text-center my-8">
-        Hello, Redux RTK Polygon
-      </h1>
-      <div className="flex justify-center items-center h-screen w-auto mx-auto">
-        <BooksList />
-      </div>
+      <h1 className="text-3xl font-bold text-center my-8">Reading club</h1>
+      <BooksList />
     </>
   )
 }

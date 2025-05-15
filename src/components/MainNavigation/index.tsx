@@ -15,8 +15,8 @@ const MainNavigation = (): JSX.Element => {
           href={paths.home()}
           className="border border-default-200 rounded-lg p-2 min-w-[80px] flex gap-2 hover:bg-primary-100 transition-colors duration-200"
         >
-          <span>📙</span>
-          <p className="font-bold text-inherit">Club</p>
+          <span>📙 ← 👁️</span>
+          <p className="font-bold text-inherit">Clubb</p>
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">

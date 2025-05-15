@@ -5,16 +5,21 @@ import { useSelector, useDispatch } from "react-redux"
 import { RootState, AppDispatch } from "@/lib/redux/store/index"
 import { fetchBooks } from "@/lib/redux/slices/booksSlice"
 
-interface Props {}
-
 const BooksList = (): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>()
   const books = useSelector((state: RootState) => state.books)
+  const shouldFetch = !books.data?.length
 
+  /**
+   * Fetch books from the API if they are not already in the store.
+   * - IF prefetched on SSR, then do not fetch.
+   */
   useEffect(() => {
-    dispatch(fetchBooks())
+    if (shouldFetch) {
+      dispatch(fetchBooks())
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [shouldFetch])
 
   return (
     <div className="flex flex-col gap-2">

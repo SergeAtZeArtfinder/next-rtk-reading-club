@@ -1,7 +1,7 @@
 import type { GetServerSideProps } from "next"
 import { wrapper } from "@/lib/redux/store/wrapper"
 import { setValue } from "@/lib/redux/slices/exampleSlice"
-import ExampleComponent from "@/components/ExampleComponent"
+import BooksList from "@/components/books/BooksList"
 
 const HomePage = () => {
   return (
@@ -10,7 +10,7 @@ const HomePage = () => {
         Hello, Redux RTK Polygon
       </h1>
       <div className="flex justify-center items-center h-screen w-auto mx-auto">
-        <ExampleComponent />
+        <BooksList />
       </div>
     </>
   )

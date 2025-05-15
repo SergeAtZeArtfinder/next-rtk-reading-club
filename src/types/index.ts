@@ -1,8 +1,10 @@
 export interface Book {
   id: string
+  createdAt: string
+  updatedAt: string
   title: string
   genre: string
-  description: string
   author: string
+  description: string
   images: string[]
 }

@@ -22,11 +22,10 @@ const BooksList = (): JSX.Element => {
   }, [shouldFetch])
 
   return (
-    <div className="flex flex-col gap-2">
-      <h1 className="text-3xl font-bold text-center my-8">Books List</h1>
+    <>
       {books.loading && <p>Loading...</p>}
       {books.error && <p>{books.error}</p>}
-      <ul className="flex gap-2">
+      <ul className="w-full grid gap-2 grid-cols-gallery">
         {books.data?.map((book) => (
           <li key={book.id} className="border p-4">
             <h2 className="text-xl font-semibold">{book.title}</h2>
@@ -34,7 +33,7 @@ const BooksList = (): JSX.Element => {
           </li>
         ))}
       </ul>
-    </div>
+    </>
   )
 }
 

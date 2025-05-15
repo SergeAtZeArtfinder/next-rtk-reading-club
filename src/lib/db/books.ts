@@ -1,24 +1,12 @@
-import { Book } from "@/types"
-
-const books = [
-  {
-    id: "1",
-    title: "The Wise Man's Fear",
-    author: "Patrick Rothfuss",
-    genre: "Fiction",
-    description:
-      "“There are three things all wise men fear: the sea in storm, a night with no moon, and the anger of a gentle man.”",
-    images: [
-      "/public/images/wisemansfear_1.jpeg",
-      "/public/images/wisemansfear2.jpg",
-    ],
-  },
-]
+import type { Book } from "@/types"
+import { prisma } from "."
 
 export const getAllBooks = (): Promise<Book[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(books)
-    }, 1000)
+  return prisma.book.findMany().then((books) => {
+    return books.map((book) => ({
+      ...book,
+      createdAt: book.createdAt.toString(),
+      updatedAt: book.updatedAt.toString(),
+    }))
   })
 }

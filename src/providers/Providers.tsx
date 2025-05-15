@@ -11,7 +11,9 @@ interface Props {
 const Providers = ({ children }: Props): JSX.Element => {
   return (
     <HeroUIProvider>
-      <NextThemesProvider attribute="class">{children}</NextThemesProvider>
+      <NextThemesProvider attribute="class" defaultTheme="dark">
+        {children}
+      </NextThemesProvider>
     </HeroUIProvider>
   )
 }

@@ -2,6 +2,12 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+Due to next.js v14, react v19, and other peer deps to install run with flag :
+
+```sh
+npm install --legacy-peer-deps
+```
+
 First, run the development server:
 
 ```bash

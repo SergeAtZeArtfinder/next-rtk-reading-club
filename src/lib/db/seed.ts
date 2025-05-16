@@ -1,3 +1,7 @@
+import { hash } from "bcrypt"
+
+import type { Prisma } from "@prisma/client"
+
 import { prisma } from "."
 
 const books = [
@@ -11,7 +15,8 @@ const books = [
       "https://res.cloudinary.com/dyxroepux/image/upload/v1747296941/wisemansfear_1_dqntno.jpg",
       "https://res.cloudinary.com/dyxroepux/image/upload/v1747296941/wisemansfear2_caitga.jpg",
     ],
-    externalLink: "",
+    externalLink:
+      "https://www.goodreads.com/book/show/1215032.The_Wise_Man_s_Fear",
   },
   {
     title: "The Name of the Wind",
@@ -22,7 +27,8 @@ const books = [
     images: [
       "https://res.cloudinary.com/dyxroepux/image/upload/v1747297231/186074_ko4msc.jpg",
     ],
-    externalLink: "",
+    externalLink:
+      "https://www.goodreads.com/book/show/186074.The_Name_of_the_Wind",
   },
   {
     title: "Pride & Prejudice",
@@ -33,7 +39,8 @@ const books = [
     images: [
       "https://res.cloudinary.com/dyxroepux/image/upload/v1747297431/129915654_ouijpz.jpg",
     ],
-    externalLink: "",
+    externalLink:
+      "https://www.goodreads.com/book/show/129915654-pride-prejudice",
   },
   {
     title: "The Alchemist",
@@ -44,7 +51,7 @@ const books = [
     images: [
       "https://res.cloudinary.com/dyxroepux/image/upload/v1747297568/18144590_hivlnj.jpg",
     ],
-    externalLink: "",
+    externalLink: "https://www.goodreads.com/book/show/18144590-the-alchemist",
   },
   {
     title: "The Girl With the Dragon Tattoo",
@@ -55,7 +62,8 @@ const books = [
     images: [
       "https://res.cloudinary.com/dyxroepux/image/upload/v1747297711/2429135_urodhw.jpg",
     ],
-    externalLink: "",
+    externalLink:
+      "https://www.goodreads.com/book/show/2429135.The_Girl_With_the_Dragon_Tattoo",
   },
   {
     title: "The Financier",
@@ -66,15 +74,79 @@ const books = [
     images: [
       "https://res.cloudinary.com/dyxroepux/image/upload/v1747297846/381364_pfigmo.jpg",
     ],
-    externalLink: "",
+    externalLink: "https://www.goodreads.com/book/show/381364.The_Financier",
   },
 ]
 
+const defaultPw = "Secret123"
+const defaultImage =
+  "https://res.cloudinary.com/dyxroepux/image/upload/v1747394229/icon-7797704_640_tpq01s.png"
+const getUsersInput = async (): Promise<Prisma.UserCreateInput[]> => {
+  const userData: Prisma.UserCreateInput[] = [
+    {
+      name: "John Doe",
+      email: "j.doe@test.com",
+      passwordHash: defaultPw,
+      image: defaultImage,
+    },
+    {
+      name: "Jane Doe",
+      email: "jane.doe@test.com",
+      passwordHash: defaultPw,
+      image: defaultImage,
+    },
+    {
+      name: "Johnny Pony",
+      email: "johnny.pony@test.com",
+      passwordHash: defaultPw,
+      image: defaultImage,
+    },
+  ]
+  const hashedUsers = await Promise.all(
+    userData.map(async (user) => {
+      const hashedPassword = await hash(user.passwordHash, 10)
+      return {
+        ...user,
+        passwordHash: hashedPassword,
+      }
+    }),
+  )
+
+  return hashedUsers
+}
+
+const seedUsers = async () => {
+  try {
+    const users = await getUsersInput()
+    await prisma.$transaction(async (tx) => {
+      await tx.user.createMany({
+        data: users,
+      })
+    })
+
+    console.log("Users seeded successfully")
+  } catch (error) {
+    console.error("Error seeding users:", JSON.stringify(error, null, 2))
+  }
+}
+
 const seedBooks = async () => {
   try {
-    await prisma.book.createMany({
-      data: books,
+    const allUsers = await prisma.user.findMany()
+
+    const results = allUsers.map(async (user, index) => {
+      const startIndex = index * 2
+      const endIndex = startIndex + 2
+
+      return await prisma.book.createMany({
+        data: books.slice(startIndex, endIndex).map((book) => ({
+          ...book,
+          userId: user.id,
+        })),
+      })
     })
+
+    await Promise.all(results)
     console.log("Books seeded successfully")
   } catch (error) {
     console.error("Error seeding books:", error)

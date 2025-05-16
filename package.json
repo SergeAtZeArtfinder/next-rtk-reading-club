@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,mjs,cjs,json}'",
+    "check-types": "npx tsc --pretty --noEmit",
     "postinstall": "prisma generate",
     "db-migrate": "npx prisma migrate dev",
     "db-studio": "npx prisma studio",

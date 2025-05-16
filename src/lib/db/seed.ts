@@ -11,6 +11,7 @@ const books = [
       "https://res.cloudinary.com/dyxroepux/image/upload/v1747296941/wisemansfear_1_dqntno.jpg",
       "https://res.cloudinary.com/dyxroepux/image/upload/v1747296941/wisemansfear2_caitga.jpg",
     ],
+    externalLink: "",
   },
   {
     title: "The Name of the Wind",
@@ -21,6 +22,7 @@ const books = [
     images: [
       "https://res.cloudinary.com/dyxroepux/image/upload/v1747297231/186074_ko4msc.jpg",
     ],
+    externalLink: "",
   },
   {
     title: "Pride & Prejudice",
@@ -31,6 +33,7 @@ const books = [
     images: [
       "https://res.cloudinary.com/dyxroepux/image/upload/v1747297431/129915654_ouijpz.jpg",
     ],
+    externalLink: "",
   },
   {
     title: "The Alchemist",
@@ -41,6 +44,7 @@ const books = [
     images: [
       "https://res.cloudinary.com/dyxroepux/image/upload/v1747297568/18144590_hivlnj.jpg",
     ],
+    externalLink: "",
   },
   {
     title: "The Girl With the Dragon Tattoo",
@@ -51,6 +55,7 @@ const books = [
     images: [
       "https://res.cloudinary.com/dyxroepux/image/upload/v1747297711/2429135_urodhw.jpg",
     ],
+    externalLink: "",
   },
   {
     title: "The Financier",
@@ -61,6 +66,7 @@ const books = [
     images: [
       "https://res.cloudinary.com/dyxroepux/image/upload/v1747297846/381364_pfigmo.jpg",
     ],
+    externalLink: "",
   },
 ]
 

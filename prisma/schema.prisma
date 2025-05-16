@@ -17,4 +17,5 @@ model Book {
   author String
   description String
   images String[]
+  externalLink String
 }

@@ -7,4 +7,5 @@ export interface Book {
   author: string
   description: string
   images: string[]
+  externalLink: string
 }

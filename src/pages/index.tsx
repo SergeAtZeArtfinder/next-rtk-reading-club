@@ -10,11 +10,10 @@ const HomePage = () => {
   return (
     <>
       <h1 className="text-3xl font-bold text-center my-8">
-        Hello, Redux RTK Polygon
+        Reading clubb{" "}
+        <small className="text-xs italic">look in zee boook...</small>
       </h1>
-      <div className="flex justify-center items-center h-screen w-auto mx-auto">
-        <BooksList />
-      </div>
+      <BooksList />
     </>
   )
 }

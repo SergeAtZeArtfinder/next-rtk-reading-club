@@ -9,6 +9,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  CardFooter,
   Button,
   Input,
   Form,
@@ -17,6 +18,7 @@ import {
 
 import { paths } from "@/lib/utils"
 import { schemaLogin } from "@/lib/validation"
+import AuthFormFooter from "../AuthFormFooter"
 import EyeIconButton from "../EyeIconButton"
 
 const SignInForm = (): JSX.Element => {
@@ -88,13 +90,30 @@ const SignInForm = (): JSX.Element => {
             isDisabled={isSubmitDisabled}
             fullWidth
             type="submit"
-            color="warning"
+            color="secondary"
             className="disabled:opacity-75 disabled:cursor-not-allowed"
           >
             Login
           </Button>
+          <Button
+            onClick={() => {
+              form.reset()
+            }}
+            isLoading={isSubmitting}
+            isDisabled={isSubmitDisabled}
+            fullWidth
+            type="reset"
+            color="secondary"
+            variant="bordered"
+            className="disabled:opacity-75 disabled:cursor-not-allowed"
+          >
+            Reset
+          </Button>
         </Form>
       </CardBody>
+      <CardFooter>
+        <AuthFormFooter />
+      </CardFooter>
     </Card>
   )
 }

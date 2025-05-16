@@ -2,21 +2,18 @@
 
 import React from "react"
 import Link from "next/link"
-import { useSession, signOut } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
   Button,
 } from "@heroui/react"
 
 import { paths } from "@/lib/utils"
 import ThemeSwitcher from "./ThemeSwitcher"
+import UserMenu from "./UserMenu"
 
 const MainNavigation = (): JSX.Element => {
   const { data: session } = useSession()
@@ -33,9 +30,11 @@ const MainNavigation = (): JSX.Element => {
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem>
-          <Link href={paths.addBook()}>add book</Link>
-        </NavbarItem>
+        {isLoggedIn && (
+          <NavbarItem>
+            <Link href={paths.addBook()}>add book</Link>
+          </NavbarItem>
+        )}
         <NavbarItem isActive>
           <Link href={paths.about()}>about</Link>
         </NavbarItem>
@@ -46,32 +45,32 @@ const MainNavigation = (): JSX.Element => {
         {isLoggedIn ? (
           <>
             <NavbarItem className="hidden lg:flex">
-              <Dropdown>
-                <DropdownTrigger>
-                  <Button variant="bordered" className="hover:bg-primary-100">
-                    Welcome {session.user.name} !!!
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Static Actions">
-                  <DropdownItem
-                    key="new"
-                    onClick={() => {
-                      signOut()
-                    }}
-                  >
-                    Logout
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+              <UserMenu user={session.user} />
             </NavbarItem>
           </>
         ) : (
           <>
             <NavbarItem className="hidden lg:flex">
-              <Link href={paths.signin()}>Login</Link>
+              <Button
+                as={Link}
+                color="secondary"
+                variant="bordered"
+                size="sm"
+                href={paths.signin()}
+              >
+                Login
+              </Button>
             </NavbarItem>
             <NavbarItem className="hidden lg:flex">
-              <Link href={paths.signup()}>Sign up</Link>
+              <Button
+                as={Link}
+                color="secondary"
+                variant="bordered"
+                size="sm"
+                href={paths.signup()}
+              >
+                Sign up
+              </Button>
             </NavbarItem>
           </>
         )}

@@ -14,6 +14,7 @@ import {
   Input,
   Form,
   addToast,
+  CardFooter,
 } from "@heroui/react"
 
 import type { NextApiErrorResponse, NextApiSuccessResponse } from "@/types"
@@ -21,6 +22,7 @@ import type { NextApiErrorResponse, NextApiSuccessResponse } from "@/types"
 import { paths } from "@/lib/utils"
 import { schemaRegister } from "@/lib/validation"
 import { formatErrorMessage } from "@/lib/utils"
+import AuthFormFooter from "../AuthFormFooter"
 import EyeIconButton from "../EyeIconButton"
 
 const SignupForm = (): JSX.Element => {
@@ -167,13 +169,31 @@ const SignupForm = (): JSX.Element => {
             isDisabled={isSubmitDisabled}
             fullWidth
             type="submit"
-            color="warning"
+            color="secondary"
             className="disabled:opacity-75 disabled:cursor-not-allowed"
           >
             Login
           </Button>
+
+          <Button
+            onClick={() => {
+              form.reset()
+            }}
+            isLoading={isSubmitting}
+            isDisabled={isSubmitDisabled}
+            fullWidth
+            type="reset"
+            color="secondary"
+            variant="bordered"
+            className="disabled:opacity-75 disabled:cursor-not-allowed"
+          >
+            Reset
+          </Button>
         </Form>
       </CardBody>
+      <CardFooter>
+        <AuthFormFooter isRegister />
+      </CardFooter>
     </Card>
   )
 }

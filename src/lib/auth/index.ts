@@ -1,11 +1,13 @@
-// pages/api/auth/[...nextauth].ts
-import { type AuthOptions } from "next-auth"
+import { compare } from "bcrypt"
 import CredentialsProvider from "next-auth/providers/credentials" // Or any other provider
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
+
+import type { AuthOptions } from "next-auth"
+
 import { getUserByEmail } from "@/lib/db/users"
 import { schemaLogin } from "@/lib/validation"
-import { prisma } from "@/lib/db" // We'll define this
-import { compare } from "bcrypt"
+import { paths } from "@/lib/utils"
+import { prisma } from "@/lib/db"
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -40,6 +42,24 @@ export const authOptions: AuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/signin", // Optional custom sign-in
+    signIn: paths.signin(),
+    error: paths.signin(),
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user?.role) {
+        token.role = user.role
+      }
+      return token
+    },
+    session: async ({ session, token }) => {
+      if (token.sub && session.user) {
+        session.user.id = token.sub
+        session.user.role = token.role as "USER" | "ADMIN"
+      }
+
+      return session
+    },
+    // https://next-auth.js.org/configuration/nextjs
   },
 }

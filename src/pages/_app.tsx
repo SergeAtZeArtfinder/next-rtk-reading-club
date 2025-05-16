@@ -1,4 +1,3 @@
-import "@/styles/globals.css"
 import type { AppProps } from "next/app"
 import type { Session } from "next-auth"
 
@@ -6,6 +5,7 @@ import { wrapper } from "@/lib/redux/store/wrapper"
 import Providers from "@/providers/Providers"
 import MainNavigation from "@/components/MainNavigation"
 import MainFooter from "@/components/MainFooter"
+import "@/styles/globals.css"
 
 function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (

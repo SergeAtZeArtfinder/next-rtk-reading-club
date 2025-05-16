@@ -9,3 +9,14 @@ export interface Book {
   images: string[]
   externalLink: string
 }
+
+export interface NextApiErrorResponse {
+  success: false
+  error: string
+  redirectPath?: string
+}
+
+export interface NextApiSuccessResponse<T> {
+  success: true
+  data: T
+}

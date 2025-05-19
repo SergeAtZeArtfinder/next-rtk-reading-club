@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 
 import type { NextApiRequest, NextApiResponse } from "next"
 import type { NextApiErrorResponse, NextApiSuccessResponse } from "@/types"

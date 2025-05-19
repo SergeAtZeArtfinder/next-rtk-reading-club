@@ -179,8 +179,7 @@ const SignupForm = (): JSX.Element => {
             onClick={() => {
               form.reset()
             }}
-            isLoading={isSubmitting}
-            isDisabled={isSubmitDisabled}
+            isDisabled={isSubmitDisabled && isSubmitting}
             fullWidth
             type="reset"
             color="secondary"

@@ -34,19 +34,29 @@ const SignInForm = (): JSX.Element => {
   const { isDirty, isLoading, isSubmitting } = form.formState
   const isSubmitDisabled = !isDirty || isLoading || isSubmitting
   const onSubmit = async (values: z.infer<typeof schemaLogin>) => {
+    const { email, password } = values
     const res = await signIn("credentials", {
-      ...values,
+      email,
+      password,
       redirect: true,
       callbackUrl: paths.home(),
     })
 
-    res?.error &&
+    if (res?.ok === false) {
       addToast({
         title: "Login failed",
-        description: res.error,
+        description: res.error || `Signin failed with status ${res.status}`,
         color: "danger",
         timeout: 5000,
       })
+    } else {
+      addToast({
+        title: "Login successful",
+        description: "You are now logged in",
+        color: "success",
+        timeout: 5000,
+      })
+    }
   }
   return (
     <Card className="w-full max-w-lg mx-auto mt-10">
@@ -56,7 +66,6 @@ const SignInForm = (): JSX.Element => {
       </CardHeader>
       <CardBody>
         <Form
-          method="post"
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-4"
         >
@@ -99,8 +108,7 @@ const SignInForm = (): JSX.Element => {
             onClick={() => {
               form.reset()
             }}
-            isLoading={isSubmitting}
-            isDisabled={isSubmitDisabled}
+            isDisabled={isSubmitDisabled && isSubmitting}
             fullWidth
             type="reset"
             color="secondary"

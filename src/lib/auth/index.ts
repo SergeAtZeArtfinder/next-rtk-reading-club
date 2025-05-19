@@ -1,4 +1,4 @@
-import { compare } from "bcrypt"
+import { compare } from "bcryptjs"
 import CredentialsProvider from "next-auth/providers/credentials" // Or any other provider
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 

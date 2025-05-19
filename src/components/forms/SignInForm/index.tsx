@@ -44,16 +44,9 @@ const SignInForm = (): JSX.Element => {
 
     if (res?.ok === false) {
       addToast({
-        title: "Login failed",
+        title: "Signin failed",
         description: res.error || `Signin failed with status ${res.status}`,
         color: "danger",
-        timeout: 5000,
-      })
-    } else {
-      addToast({
-        title: "Login successful",
-        description: "You are now logged in",
-        color: "success",
         timeout: 5000,
       })
     }

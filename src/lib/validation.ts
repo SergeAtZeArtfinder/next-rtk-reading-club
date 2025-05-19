@@ -1,5 +1,8 @@
 import { z } from "zod"
 
+export const fileSchema = z.instanceof(File)
+export const filesSchema = z.array(fileSchema)
+
 export const schemaLogin = z.object({
   email: z.string().email({ message: "Invalid email address" }),
   password: z

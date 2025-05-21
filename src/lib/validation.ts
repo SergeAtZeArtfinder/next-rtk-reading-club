@@ -1,6 +1,9 @@
 import { z } from "zod"
 
-export const fileSchema = z.instanceof(File)
+export const fileSchema =
+  typeof window !== "undefined" && typeof File !== "undefined"
+    ? z.instanceof(File)
+    : z.any()
 export const filesSchema = z.array(fileSchema)
 
 export const schemaLogin = z.object({
@@ -27,3 +30,14 @@ export const schemaRegister = z
     message: "Passwords don't match",
     path: ["confirmPassword"],
   })
+
+export const schemaCreateBook = z.object({
+  title: z.string().min(1, { message: "Title is required" }),
+  genre: z.string().min(1, { message: "Genre is required" }),
+  author: z.string().min(3, { message: "Author is required" }),
+  description: z
+    .string()
+    .min(25, { message: "Description is required, 25 characters min" }),
+  externalLink: z.string().url({ message: "Invalid URL" }),
+  images: z.array(z.string().url({ message: "Invalid URL" })),
+})

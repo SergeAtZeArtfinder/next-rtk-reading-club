@@ -1,6 +1,6 @@
 import { v2 as cloudinary, type UploadApiResponse } from "cloudinary"
 
-import { CloudinaryImage } from "@/types"
+import type { CloudinaryImage } from "@/types"
 
 import { fileSchema, filesSchema } from "@/lib/validation"
 import {

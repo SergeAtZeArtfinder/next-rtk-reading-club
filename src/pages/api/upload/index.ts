@@ -8,82 +8,55 @@ import type {
 } from "@/types"
 
 import { authOptions } from "@/lib/auth"
+import { parseForm } from "@/lib/parseFormData"
+import { uploadMultipleImagesToCloudinary } from "@/lib/cloudinary"
 
-import {
-  uploadMultipleImagesToCloudinary,
-  deleteCloudinaryImageByUrl,
-} from "@/lib/cloudinary"
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
 
-const handleUploadManyImages = (
+const handleUploadManyImages = async (
   req: NextApiRequest,
   res: NextApiResponse<
     NextApiErrorResponse | NextApiSuccessResponse<CloudinaryImage[]>
   >,
 ) => {
-  const session = getServerSession(req, res, authOptions)
-  if (!session) {
-    return res.status(401).json({
-      success: false,
-      error: "Unauthorized",
-      redirectPath: "/api/auth/signin",
-    })
-  }
+  try {
+    const session = getServerSession(req, res, authOptions)
+    if (!session) {
+      return res.status(401).json({
+        success: false,
+        error: "Unauthorized",
+        redirectPath: "/api/auth/signin",
+      })
+    }
 
-  const { files } = req.body
-  if (!files || !Array.isArray(files)) {
-    return res.status(400).json({
-      success: false,
-      error: "Invalid files",
-    })
-  }
+    const files = await parseForm(req)
 
-  uploadMultipleImagesToCloudinary(files)
-    .then((images) => {
-      return res.status(200).json({ success: true, data: images.data || [] })
-    })
-    .catch((error) => {
-      const message =
-        error instanceof Error ? error.message : "Failed to upload images"
+    const result = await uploadMultipleImagesToCloudinary(files)
+
+    if (result.error) {
       return res.status(500).json({
         success: false,
-        error: message,
+        error: result.error,
       })
-    })
-}
-
-const handleDeleteImage = (
-  req: NextApiRequest,
-  res: NextApiResponse<NextApiErrorResponse | NextApiSuccessResponse<string>>,
-) => {
-  const session = getServerSession(req, res, authOptions)
-  if (!session) {
-    return res.status(401).json({
+    } else {
+      const images = result.data
+      return res.status(200).json({
+        success: true,
+        data: images || [],
+      })
+    }
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to upload images"
+    return res.status(500).json({
       success: false,
-      error: "Unauthorized",
-      redirectPath: "/api/auth/signin",
+      error: message,
     })
   }
-
-  const { publicId } = req.body
-  if (!publicId) {
-    return res.status(400).json({
-      success: false,
-      error: "Invalid publicId",
-    })
-  }
-
-  deleteCloudinaryImageByUrl(publicId)
-    .then(({ data }) => {
-      return res.status(200).json({ success: true, data: data?.imageUrl || "" })
-    })
-    .catch((error) => {
-      const message =
-        error instanceof Error ? error.message : "Failed to delete image"
-      return res.status(500).json({
-        success: false,
-        error: message,
-      })
-    })
 }
 
 const handleUploads = (
@@ -95,8 +68,6 @@ const handleUploads = (
   switch (req.method) {
     case "POST":
       return handleUploadManyImages(req, res)
-    case "DELETE":
-      return handleDeleteImage(req, res)
     default:
       return res.status(405).end("Method Not Allowed")
   }

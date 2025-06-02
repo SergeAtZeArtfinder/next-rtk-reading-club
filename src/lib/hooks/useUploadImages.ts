@@ -7,18 +7,21 @@ import type {
   NextApiSuccessResponse,
 } from "@/types"
 
+import { getImagePublicId } from "@/lib/cloudinary/utils"
+
 const uploadManyToCloudinary = async (
   files: File[],
 ): Promise<
   NextApiSuccessResponse<CloudinaryImage[]> | NextApiErrorResponse
 > => {
   try {
+    const formData = new FormData()
+    for (let i = 0; i < files.length; i++) {
+      formData.append("files", files[i])
+    }
     const res = await fetch("/api/upload", {
       method: "POST",
-      body: JSON.stringify(files),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      body: formData,
     })
     const data = await res.json()
     if (!res.ok) {
@@ -54,39 +57,40 @@ const deleteOneFromCloudinary = async (
   src: string,
 ): Promise<
   | NextApiSuccessResponse<{
-      imageUrl: string
+      publicId: string
     }>
   | NextApiErrorResponse
 > => {
+  const publicId = getImagePublicId(src)
+
   try {
-    const res = await fetch("/api/upload", {
+    const res = await fetch(`/api/upload/${publicId}`, {
       method: "DELETE",
-      body: JSON.stringify({ publicId: src }),
       headers: {
         "Content-Type": "application/json",
       },
     })
-    const data = await res.json()
     if (!res.ok) {
+      const errorRes = await res.json()
       return {
         success: false,
-        error: data.error || "Failed to delete image",
+        error: errorRes.error || "Failed to delete image",
       }
     }
-    if (!data.success) {
+
+    const response = await res.json()
+
+    if (!response.success) {
       return {
         success: false,
-        error: data.error || "Failed to delete image",
-        redirectPath: data.redirectPath,
+        error: response.error || "Failed to delete image",
+        redirectPath: response.redirectPath,
       }
     }
+
     return {
       success: true,
-      data: (
-        data as NextApiSuccessResponse<{
-          imageUrl: string
-        }>
-      ).data,
+      data: response.data,
     }
   } catch (error) {
     const message =
@@ -107,6 +111,7 @@ export const useUploadedImages = () => {
   }: {
     files: File[]
     onSuccess: (data: string[]) => void
+    onError?: (error: string) => void
   }) => {
     startTransition(async () => {
       const res = await uploadManyToCloudinary(files)
@@ -126,13 +131,13 @@ export const useUploadedImages = () => {
     onSuccess,
   }: {
     src: string
-    onSuccess: (imageUrl: string) => void
+    onSuccess: (publicId: string) => void
   }) => {
     startTransition(async () => {
       const res = await deleteOneFromCloudinary(src)
 
-      if (res.success && res.data) {
-        onSuccess(res.data.imageUrl)
+      if (res.success) {
+        onSuccess(res.data.publicId)
       }
       addToast({
         color: res.success ? "default" : "danger",

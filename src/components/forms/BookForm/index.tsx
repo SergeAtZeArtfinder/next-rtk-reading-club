@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useRef } from "react"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -8,16 +8,18 @@ import {
   Card,
   CardBody,
   CardHeader,
-  CardFooter,
   Button,
   Input,
   Form,
   addToast,
+  Image,
+  Textarea,
 } from "@heroui/react"
+import { FaBook } from "react-icons/fa"
 
 import type { Book } from "@prisma/client"
-import {} from "@/types"
 
+import { useUploadedImages } from "@/lib/hooks/useUploadImages"
 import { schemaCreateBook } from "@/lib/validation"
 
 const mockAction = (
@@ -42,6 +44,8 @@ interface Props {
 
 const BookForm = ({ book }: Props): JSX.Element => {
   const isUpdate = !!book
+  const { isUploading, handleUploadImage, handleDeleteImage } =
+    useUploadedImages()
   const form = useForm<z.infer<typeof schemaCreateBook>>({
     resolver: zodResolver(schemaCreateBook),
     defaultValues: {
@@ -53,9 +57,12 @@ const BookForm = ({ book }: Props): JSX.Element => {
       images: book?.images || [],
     },
   })
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const { isDirty, isLoading, isSubmitting } = form.formState
   const isSubmitDisabled = !isDirty || isLoading || isSubmitting
+  const images = form.watch("images")
+
   const onSubmit = async (values: z.infer<typeof schemaCreateBook>) => {
     const res = await mockAction(values)
     if (res?.success) {
@@ -95,30 +102,97 @@ const BookForm = ({ book }: Props): JSX.Element => {
             label="Title"
             placeholder="Enter the book title"
             required
+            isInvalid={!!form.formState.errors.title}
+            errorMessage={form.formState.errors.title?.message}
           />
           <Input
             {...form.register("author")}
             label="Author"
             placeholder="Enter the author name"
             required
+            isInvalid={!!form.formState.errors.author}
+            errorMessage={form.formState.errors.author?.message}
           />
           <Input
             {...form.register("genre")}
             label="Genre"
             placeholder="Enter the genre"
             required
+            isInvalid={!!form.formState.errors.genre}
+            errorMessage={form.formState.errors.genre?.message}
           />
-          <Input
+          <Textarea
             {...form.register("description")}
             label="Description"
             placeholder="Enter a short description"
             required
+            isInvalid={!!form.formState.errors.description}
+            errorMessage={form.formState.errors.description?.message}
+            rows={4}
           />
           <Input
             {...form.register("externalLink")}
             label="External Link"
             placeholder="Enter an external link to the book"
+            required
+            isInvalid={!!form.formState.errors.externalLink}
+            errorMessage={form.formState.errors.externalLink?.message}
           />
+
+          <Card fullWidth>
+            <CardHeader>
+              <h2 className="text-lg font-bold">Upload Images</h2>
+            </CardHeader>
+            <CardBody>
+              <Input
+                type="file"
+                ref={fileInputRef}
+                startContent={<FaBook />}
+                placeholder="Upload book cover or images"
+                onChange={async (event) => {
+                  const selectedFiles = Array.from(event.target.files || [])
+                  await handleUploadImage({
+                    files: selectedFiles,
+                    onSuccess(imageUrls) {
+                      form.setValue("images", [
+                        ...form.getValues("images"),
+                        ...imageUrls,
+                      ])
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = ""
+                      }
+                    },
+                  })
+                }}
+                disabled={isUploading}
+              />
+
+              <ul className="mt-4 grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
+                {images.map((image, index) => (
+                  <li key={index} className="flex items-center gap-2 relative">
+                    <Image src={image} alt={`Uploaded image ${index}`} />
+                    <Button
+                      onPress={() =>
+                        handleDeleteImage({
+                          src: image,
+                          onSuccess(publicId) {
+                            form.setValue(
+                              "images",
+                              images.filter((img) => !img.includes(publicId)),
+                            )
+                          },
+                        })
+                      }
+                      color="danger"
+                      className="absolute top-2 right-2 z-20"
+                    >
+                      Delete
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </CardBody>
+          </Card>
           <Button type="submit" disabled={isSubmitDisabled}>
             {isUpdate ? "Update Book" : "Add Book"}
           </Button>

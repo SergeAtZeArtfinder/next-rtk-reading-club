@@ -1,7 +1,7 @@
+import { ZodError } from "zod"
+
 import type { Book as BookPrisma } from "@prisma/client"
 import type { Book } from "@/types"
-
-import { ZodError } from "zod"
 
 export const paths = {
   home: () => "/",

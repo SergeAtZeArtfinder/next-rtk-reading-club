@@ -17,6 +17,21 @@ const initialState: BooksState = {
   error: null,
 }
 
+export const deleteBookById = createAsyncThunk<
+  Book, // Return type on success
+  { bookId: string }, // Argument type
+  { rejectValue: string } // Rejection type
+>("books/deleteBookById", async ({ bookId }, thunkApi) => {
+  const res = await fetch(`/api/books/${bookId}`, {
+    method: "DELETE",
+  })
+  const data = await res.json()
+  if (!res.ok || !data.success) {
+    return thunkApi.rejectWithValue(data.error || "Failed to delete book")
+  }
+  return data.data as Book
+})
+
 export const postNewBook = createAsyncThunk<
   Book, // Return type on success
   z.infer<typeof schemaCreateBook>, // Argument type
@@ -109,6 +124,22 @@ export const booksSlice = createSlice({
     builder.addCase(postNewBook.rejected, (state, action) => {
       state.loading = false
       state.error = action.payload || "Failed to create book"
+    })
+
+    // Handle deleteBookById
+    builder.addCase(deleteBookById.pending, (state) => {
+      state.loading = true
+      state.error = null
+    })
+    builder.addCase(deleteBookById.fulfilled, (state, action) => {
+      state.loading = false
+      if (state.data) {
+        state.data = state.data.filter((book) => book.id !== action.payload.id)
+      }
+    })
+    builder.addCase(deleteBookById.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.payload || "Failed to delete book"
     })
   },
 })

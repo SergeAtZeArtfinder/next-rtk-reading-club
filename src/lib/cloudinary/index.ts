@@ -4,11 +4,7 @@ import type { CloudinaryImage } from "@/types"
 
 import { fileSchema, filesSchema } from "@/lib/validation"
 import { parseForm } from "@/lib/parseFormData"
-import {
-  sortDeleteManyResults,
-  getImagePublicId,
-  getImagesMapById,
-} from "./utils"
+import { sortDeleteManyResults, getImagesMapById } from "./utils"
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -123,6 +119,38 @@ export const deleteCloudinaryImageByUrl = async (
     return {
       data: null,
       error: error instanceof Error ? error.message : "Failed to delete image",
+    }
+  }
+}
+
+export const deleteMultipleImagesByUrls = async (
+  urls: string[],
+): Promise<
+  | { data: { deleted: string[]; notFound: string[] }; error: null }
+  | { data: null; error: string }
+> => {
+  try {
+    if (!urls.length) {
+      return { data: { deleted: [], notFound: [] }, error: null }
+    }
+
+    const imagesMap = getImagesMapById(urls)
+    const publicIds = Object.keys(imagesMap).map((id) => `my_uploads/${id}`)
+
+    const response = await cloudinary.api.delete_resources(publicIds, {
+      invalidate: true,
+    })
+
+    const result = sortDeleteManyResults(response, imagesMap)
+
+    return {
+      data: result,
+      error: null,
+    }
+  } catch (error) {
+    return {
+      data: null,
+      error: error instanceof Error ? error.message : "Failed to delete images",
     }
   }
 }

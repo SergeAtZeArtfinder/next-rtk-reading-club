@@ -1,5 +1,6 @@
 import formidable, { File as FormidableFile, Files } from "formidable"
-import { IncomingMessage } from "http"
+
+import type { IncomingMessage } from "http"
 
 export const parseForm = (req: IncomingMessage): Promise<FormidableFile[]> => {
   const form = formidable({

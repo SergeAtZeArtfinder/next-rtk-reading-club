@@ -8,6 +8,7 @@ export interface Book {
   description: string
   images: string[]
   externalLink: string
+  userId: string
 }
 
 export interface NextApiErrorResponse {

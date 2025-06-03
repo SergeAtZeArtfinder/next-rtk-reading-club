@@ -16,34 +16,23 @@ import {
   Textarea,
 } from "@heroui/react"
 import { FaBook } from "react-icons/fa"
+import { useDispatch } from "react-redux"
 
+import type { AppDispatch } from "@/lib/redux/store/index"
 import type { Book } from "@prisma/client"
 
 import { useUploadedImages } from "@/lib/hooks/useUploadImages"
 import { schemaCreateBook } from "@/lib/validation"
-
-const mockAction = (
-  values: z.infer<typeof schemaCreateBook>,
-): Promise<
-  { success: true; data: string } | { success: false; error: string }
-> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log("Mock action completed with values:", values)
-      resolve({
-        success: true,
-        data: "Book created successfully",
-      })
-    }, 2000)
-  })
-}
+import { postNewBook } from "@/lib/redux/slices/booksSlice"
+import { useRouter } from "next/router"
 
 interface Props {
   book?: Book
 }
 
 const BookForm = ({ book }: Props): JSX.Element => {
-  const isUpdate = !!book
+  const router = useRouter()
+  const dispatch = useDispatch<AppDispatch>()
   const { isUploading, handleUploadImage, handleDeleteImage } =
     useUploadedImages()
   const form = useForm<z.infer<typeof schemaCreateBook>>({
@@ -59,25 +48,34 @@ const BookForm = ({ book }: Props): JSX.Element => {
   })
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
+  const isUpdate = !!book
   const { isDirty, isLoading, isSubmitting } = form.formState
   const isSubmitDisabled = !isDirty || isLoading || isSubmitting
   const images = form.watch("images")
 
   const onSubmit = async (values: z.infer<typeof schemaCreateBook>) => {
-    const res = await mockAction(values)
-    if (res?.success) {
+    /**
+     * @description To handle post-submit logic (like navigation or showing a toast)
+     * after dispatching a Redux async thunk, you should await
+     * the dispatch and check the result using the returned action’s meta
+     * and payload properties.
+     */
+    const action = await dispatch(postNewBook(values))
+
+    if (postNewBook.fulfilled.match(action)) {
       addToast({
         title: "Success",
-        description: res.data,
+        description: "Book created successfully",
         color: "success",
-        timeout: 5000,
+        timeout: 2000,
       })
+      router.push("/")
     } else {
       addToast({
         title: "Error",
-        description: res.error || "Something went wrong",
+        description: action.payload || "Something went wrong",
         color: "danger",
-        timeout: 5000,
+        timeout: 2000,
       })
     }
   }

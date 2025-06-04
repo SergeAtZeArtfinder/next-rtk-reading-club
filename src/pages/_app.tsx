@@ -5,6 +5,8 @@ import { wrapper } from "@/lib/redux/store/wrapper"
 import Providers from "@/providers/Providers"
 import MainNavigation from "@/components/MainNavigation"
 import MainFooter from "@/components/MainFooter"
+
+import "prismjs/themes/prism-tomorrow.css"
 import "@/styles/globals.css"
 
 function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {

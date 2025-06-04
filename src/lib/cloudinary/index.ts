@@ -1,8 +1,8 @@
-import { v2 as cloudinary, type UploadApiResponse } from "cloudinary"
+import { v2 as cloudinary } from "cloudinary"
 
 import type { CloudinaryImage } from "@/types"
 
-import { fileSchema, filesSchema } from "@/lib/validation"
+import { filesSchema } from "@/lib/validation"
 import { parseForm } from "@/lib/parseFormData"
 import { sortDeleteManyResults, getImagesMapById } from "./utils"
 
@@ -18,9 +18,6 @@ export const uploadMultipleImagesToCloudinary = async (
   { data: CloudinaryImage[]; error: null } | { data: null; error: string }
 > => {
   try {
-    const validFiles = filesSchema.parse(files)
-    if (!validFiles.length) throw new Error("No files found in form data")
-
     const results = await Promise.all(
       files.map((file) =>
         cloudinary.uploader.upload(file.filepath, {
@@ -43,52 +40,6 @@ export const uploadMultipleImagesToCloudinary = async (
     return {
       data: null,
       error: error instanceof Error ? error.message : "Failed to upload images",
-    }
-  }
-}
-
-export const uploadSingleImageToCloudinary = async (
-  file: File,
-): Promise<
-  { data: CloudinaryImage; error: null } | { data: null; error: string }
-> => {
-  const validFile = fileSchema.parse(file)
-
-  if (!validFile) {
-    return {
-      data: null,
-      error: "No valid file found in form data",
-    }
-  }
-
-  try {
-    const arrayBuffer = await validFile.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-
-    const result = await new Promise<UploadApiResponse>((resolve, reject) => {
-      cloudinary.uploader
-        .upload_stream({ resource_type: "auto" }, (error, result) => {
-          if (error || !result) {
-            return reject(error || new Error("Upload failed"))
-          }
-          resolve(result)
-        })
-        .end(buffer)
-    })
-
-    return {
-      data: {
-        publicId: result.public_id,
-        url: result.secure_url,
-        width: result.width,
-        height: result.height,
-      },
-      error: null,
-    }
-  } catch (error) {
-    return {
-      data: null,
-      error: error instanceof Error ? error.message : "Failed to upload image",
     }
   }
 }

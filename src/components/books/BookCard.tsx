@@ -2,12 +2,13 @@
 
 import React, { type MouseEvent } from "react"
 import { Card, CardBody, Image, Button, addToast } from "@heroui/react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { MdDeleteOutline } from "react-icons/md"
 import { useSession } from "next-auth/react"
 
 import type { Book } from "@/types"
+import type { AppDispatch, RootState } from "@/lib/redux/store/index"
 
-import { AppDispatch } from "@/lib/redux/store/index"
 import { deleteBookById } from "@/lib/redux/slices/booksSlice"
 interface Props {
   book: Book
@@ -16,6 +17,7 @@ interface Props {
 const BookCard = ({ book }: Props): JSX.Element => {
   const { data: session } = useSession()
   const dispatch = useDispatch<AppDispatch>()
+  const { loading } = useSelector((state: RootState) => state.books)
   const userId = session?.user?.id || ""
   const role = session?.user?.role || "user"
   const isOwner = book.userId === userId || role === "ADMIN"
@@ -59,8 +61,11 @@ const BookCard = ({ book }: Props): JSX.Element => {
         {isOwner && (
           <Button
             onClick={handleDelete}
-            color="secondary"
-            className="absolute bottom-2 right-2 z-50"
+            color="danger"
+            className="absolute top-4 right-4 z-20 disabled:bg-gray-500 px-2"
+            disabled={loading}
+            startContent={<MdDeleteOutline size={24} />}
+            size="sm"
           >
             Delete
           </Button>

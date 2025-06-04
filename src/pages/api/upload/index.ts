@@ -69,7 +69,8 @@ const handleUploads = (
     case "POST":
       return handleUploadManyImages(req, res)
     default:
-      return res.status(405).end("Method Not Allowed")
+      res.setHeader("Allow", ["POST"])
+      return res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 }
 

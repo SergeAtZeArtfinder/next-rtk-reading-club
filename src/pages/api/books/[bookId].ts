@@ -96,6 +96,6 @@ export default async function handler(
       return deleteBookHandler(req, res)
     default:
       res.setHeader("Allow", ["PUT", "DELETE"])
-      res.status(405).end(`Method ${req.method} Not Allowed`)
+      return res.status(405).end(`Method ${req.method} Not Allowed`)
   }
 }

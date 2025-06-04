@@ -1,4 +1,4 @@
-import formidable, { File as FormidableFile, Files } from "formidable"
+import formidable, { type File as FormidableFile, type Files } from "formidable"
 
 import type { IncomingMessage } from "http"
 

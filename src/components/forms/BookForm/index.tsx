@@ -16,15 +16,16 @@ import {
   Textarea,
 } from "@heroui/react"
 import { FaBook } from "react-icons/fa"
+import { MdDeleteOutline } from "react-icons/md"
 import { useDispatch } from "react-redux"
+import { useRouter } from "next/router"
 
 import type { AppDispatch } from "@/lib/redux/store/index"
 import type { Book } from "@prisma/client"
 
 import { useUploadedImages } from "@/lib/hooks/useUploadImages"
-import { schemaCreateBook } from "@/lib/validation"
 import { postNewBook } from "@/lib/redux/slices/booksSlice"
-import { useRouter } from "next/router"
+import { schemaCreateBook } from "@/lib/validation"
 
 interface Props {
   book?: Book
@@ -167,8 +168,15 @@ const BookForm = ({ book }: Props): JSX.Element => {
 
               <ul className="mt-4 grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
                 {images.map((image, index) => (
-                  <li key={index} className="flex items-center gap-2 relative">
-                    <Image src={image} alt={`Uploaded image ${index}`} />
+                  <li
+                    key={index}
+                    className="flex items-center justify-center gap-2 relative bg-black/50 rounded-lg"
+                  >
+                    <Image
+                      src={image}
+                      alt={`Uploaded image ${index}`}
+                      className="rounded-lg object-contain"
+                    />
                     <Button
                       onPress={() =>
                         handleDeleteImage({
@@ -182,7 +190,10 @@ const BookForm = ({ book }: Props): JSX.Element => {
                         })
                       }
                       color="danger"
-                      className="absolute top-2 right-2 z-20"
+                      className="absolute top-2 right-2 z-20 disabled:bg-gray-500 px-2"
+                      disabled={isUploading}
+                      startContent={<MdDeleteOutline size={24} />}
+                      size="sm"
                     >
                       Delete
                     </Button>

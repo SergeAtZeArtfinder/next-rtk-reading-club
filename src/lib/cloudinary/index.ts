@@ -2,7 +2,6 @@ import { v2 as cloudinary } from "cloudinary"
 
 import type { CloudinaryImage } from "@/types"
 
-import { filesSchema } from "@/lib/validation"
 import { parseForm } from "@/lib/parseFormData"
 import { sortDeleteManyResults, getImagesMapById } from "./utils"
 

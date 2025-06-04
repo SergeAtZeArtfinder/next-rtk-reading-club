@@ -4,12 +4,15 @@ import React, { type MouseEvent } from "react"
 import { Card, CardBody, Image, Button, addToast } from "@heroui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { MdDeleteOutline } from "react-icons/md"
+import { FaEdit } from "react-icons/fa"
 import { useSession } from "next-auth/react"
+import Link from "next/link"
 
 import type { Book } from "@/types"
 import type { AppDispatch, RootState } from "@/lib/redux/store/index"
 
 import { deleteBookById } from "@/lib/redux/slices/booksSlice"
+import { paths } from "@/lib/utils"
 interface Props {
   book: Book
 }
@@ -59,16 +62,29 @@ const BookCard = ({ book }: Props): JSX.Element => {
         <p className="text-lg text-secondary">By {book.author}</p>
         <p className="text-small text-default-500">{book.description}</p>
         {isOwner && (
-          <Button
-            onClick={handleDelete}
-            color="danger"
-            className="absolute top-4 right-4 z-20 disabled:bg-gray-500 px-2"
-            disabled={loading}
-            startContent={<MdDeleteOutline size={24} />}
-            size="sm"
-          >
-            Delete
-          </Button>
+          <div className="absolute top-4 right-4 z-20 flex gap-2">
+            <Button
+              as={Link}
+              href={paths.editBook(book.id)}
+              startContent={<FaEdit size={24} />}
+              size="sm"
+              color="warning"
+              className=" disabled:bg-gray-500 px-2"
+              disabled={loading}
+            >
+              Edit
+            </Button>
+            <Button
+              onClick={handleDelete}
+              size="sm"
+              color="danger"
+              className=" disabled:bg-gray-500 px-2"
+              disabled={loading}
+              startContent={<MdDeleteOutline size={24} />}
+            >
+              Delete
+            </Button>
+          </div>
         )}
       </CardBody>
     </Card>

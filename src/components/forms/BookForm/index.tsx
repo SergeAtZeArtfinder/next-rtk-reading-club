@@ -21,10 +21,10 @@ import { useDispatch } from "react-redux"
 import { useRouter } from "next/router"
 
 import type { AppDispatch } from "@/lib/redux/store/index"
-import type { Book } from "@prisma/client"
+import type { Book } from "@/types"
 
 import { useUploadedImages } from "@/lib/hooks/useUploadImages"
-import { postNewBook } from "@/lib/redux/slices/booksSlice"
+import { postNewBook, editBook } from "@/lib/redux/slices/booksSlice"
 import { schemaCreateBook } from "@/lib/validation"
 
 interface Props {
@@ -50,34 +50,61 @@ const BookForm = ({ book }: Props): JSX.Element => {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const isUpdate = !!book
-  const { isDirty, isLoading, isSubmitting } = form.formState
-  const isSubmitDisabled = !isDirty || isLoading || isSubmitting
+  const { isLoading, isSubmitting } = form.formState
+  const isSubmitDisabled = isLoading || isSubmitting
   const images = form.watch("images")
 
   const onSubmit = async (values: z.infer<typeof schemaCreateBook>) => {
-    /**
-     * @description To handle post-submit logic (like navigation or showing a toast)
-     * after dispatching a Redux async thunk, you should await
-     * the dispatch and check the result using the returned action’s meta
-     * and payload properties.
-     */
-    const action = await dispatch(postNewBook(values))
-
-    if (postNewBook.fulfilled.match(action)) {
-      addToast({
-        title: "Success",
-        description: "Book created successfully",
-        color: "success",
-        timeout: 2000,
-      })
-      router.push("/")
+    if (isSubmitting || isLoading) return
+    if (isUpdate) {
+      // If we are updating an existing book, we need to include the bookId
+      const input = {
+        ...values,
+        bookId: book?.id || "",
+      }
+      const updateAction = await dispatch(editBook(input))
+      if (editBook.fulfilled.match(updateAction)) {
+        addToast({
+          title: "Success",
+          description: "Book updated successfully",
+          color: "success",
+          timeout: 2000,
+        })
+        router.push("/")
+      } else {
+        addToast({
+          title: "Error",
+          description: updateAction.payload || "Something went wrong",
+          color: "danger",
+          timeout: 2000,
+        })
+      }
     } else {
-      addToast({
-        title: "Error",
-        description: action.payload || "Something went wrong",
-        color: "danger",
-        timeout: 2000,
-      })
+      // If we are creating a new book, we just dispatch the postNewBook action
+      /**
+       * @description To handle post-submit logic (like navigation or showing a toast)
+       * after dispatching a Redux async thunk, you should await
+       * the dispatch and check the result using the returned action’s meta
+       * and payload properties.
+       */
+      const action = await dispatch(postNewBook(values))
+
+      if (postNewBook.fulfilled.match(action)) {
+        addToast({
+          title: "Success",
+          description: "Book created successfully",
+          color: "success",
+          timeout: 2000,
+        })
+        router.push("/")
+      } else {
+        addToast({
+          title: "Error",
+          description: action.payload || "Something went wrong",
+          color: "danger",
+          timeout: 2000,
+        })
+      }
     }
   }
 

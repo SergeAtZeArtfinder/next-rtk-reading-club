@@ -51,6 +51,27 @@ export const postNewBook = createAsyncThunk<
   return data.data as Book
 })
 
+export const editBook = createAsyncThunk<
+  Book, // Return type on success
+  z.infer<typeof schemaCreateBook> & { bookId: string }, // Argument type
+  { rejectValue: string } // Rejection type
+>("books/editBook", async (input, thunkApi) => {
+  const { bookId, ...restInput } = input
+
+  const res = await fetch(`/api/books/${bookId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(restInput),
+  })
+  const data = await res.json()
+  if (!res.ok || !data.success) {
+    return thunkApi.rejectWithValue(data.error || "Failed to update book")
+  }
+  return data.data as Book
+})
+
 export const fetchBooks = createAsyncThunk(
   "books/fetchBooks",
   /**
@@ -140,6 +161,31 @@ export const booksSlice = createSlice({
     builder.addCase(deleteBookById.rejected, (state, action) => {
       state.loading = false
       state.error = action.payload || "Failed to delete book"
+    })
+
+    // Handle editBook
+    builder.addCase(editBook.pending, (state) => {
+      state.loading = true
+      state.error = null
+    })
+    builder.addCase(editBook.fulfilled, (state, action) => {
+      state.loading = false
+      if (state.data) {
+        const index = state.data.findIndex(
+          (book) => book.id === action.payload.id,
+        )
+        if (index !== -1) {
+          state.data[index] = action.payload
+        } else {
+          state.data.push(action.payload)
+        }
+      } else {
+        state.data = [action.payload]
+      }
+    })
+    builder.addCase(editBook.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.payload || "Failed to update book"
     })
   },
 })

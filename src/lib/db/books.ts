@@ -18,6 +18,27 @@ export const createNewBook = async (input: Prisma.BookCreateInput) => {
   return formatBookDates(book)
 }
 
+export const isUserAuthorised = async ({
+  bookId,
+  userId,
+}: {
+  userId: string
+  bookId: string
+}): Promise<boolean> => {
+  try {
+    const existingBook = await prisma.book.findUnique({
+      where: { id: bookId },
+      select: { userId: true },
+    })
+    if (!existingBook) {
+      throw new Error("Book not found")
+    }
+    return existingBook.userId === userId
+  } catch (error) {
+    return false
+  }
+}
+
 export const updateBook = async ({
   userId,
   bookId,

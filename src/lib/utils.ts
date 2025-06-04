@@ -6,7 +6,8 @@ import type { Book } from "@/types"
 export const paths = {
   home: () => "/",
   about: () => "/about",
-  addBook: () => "/add-book",
+  addBook: () => "/book/create",
+  editBook: (bookId: string) => `/book/${bookId}`,
   signin: () => "/signin",
   signup: () => "/signup",
 }

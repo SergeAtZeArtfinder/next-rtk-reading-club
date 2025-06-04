@@ -2,7 +2,9 @@
 
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { RootState } from "@/lib/redux/store/index"
+
+import type { RootState } from "@/lib/redux/store/index"
+
 import { setValue } from "@/lib/redux/slices/exampleSlice"
 
 const ExampleComponent = (): JSX.Element => {

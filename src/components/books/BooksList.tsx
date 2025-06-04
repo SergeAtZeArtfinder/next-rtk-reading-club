@@ -2,7 +2,9 @@
 
 import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { RootState, AppDispatch } from "@/lib/redux/store/index"
+
+import type { RootState, AppDispatch } from "@/lib/redux/store"
+
 import { fetchBooks } from "@/lib/redux/slices/booksSlice"
 import BookCard from "./BookCard"
 

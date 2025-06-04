@@ -1,13 +1,9 @@
-import {
-  createSlice,
-  PayloadAction,
-  createAsyncThunk,
-  GetThunkAPI,
-  AsyncThunkAction,
-} from "@reduxjs/toolkit"
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit"
 import { HYDRATE } from "next-redux-wrapper"
+import { z } from "zod"
 
 import type { Book } from "@/types"
+import { schemaCreateBook } from "@/lib/validation"
 
 interface BooksState {
   data: Book[] | null
@@ -20,6 +16,40 @@ const initialState: BooksState = {
   loading: false,
   error: null,
 }
+
+export const deleteBookById = createAsyncThunk<
+  Book, // Return type on success
+  { bookId: string }, // Argument type
+  { rejectValue: string } // Rejection type
+>("books/deleteBookById", async ({ bookId }, thunkApi) => {
+  const res = await fetch(`/api/books/${bookId}`, {
+    method: "DELETE",
+  })
+  const data = await res.json()
+  if (!res.ok || !data.success) {
+    return thunkApi.rejectWithValue(data.error || "Failed to delete book")
+  }
+  return data.data as Book
+})
+
+export const postNewBook = createAsyncThunk<
+  Book, // Return type on success
+  z.infer<typeof schemaCreateBook>, // Argument type
+  { rejectValue: string } // Rejection type
+>("books/postNewBook", async (input, thunkApi) => {
+  const res = await fetch("/api/books", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(input),
+  })
+  const data = await res.json()
+  if (!res.ok || !data.success) {
+    return thunkApi.rejectWithValue(data.error || "Failed to create book")
+  }
+  return data.data as Book
+})
 
 export const fetchBooks = createAsyncThunk(
   "books/fetchBooks",
@@ -76,6 +106,40 @@ export const booksSlice = createSlice({
     builder.addCase(fetchBooks.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message || "Failed to fetch books"
+    })
+
+    // Handle postNewBook
+    builder.addCase(postNewBook.pending, (state) => {
+      state.loading = true
+      state.error = null
+    })
+    builder.addCase(postNewBook.fulfilled, (state, action) => {
+      state.loading = false
+      if (state.data) {
+        state.data = [action.payload, ...state.data]
+      } else {
+        state.data = [action.payload]
+      }
+    })
+    builder.addCase(postNewBook.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.payload || "Failed to create book"
+    })
+
+    // Handle deleteBookById
+    builder.addCase(deleteBookById.pending, (state) => {
+      state.loading = true
+      state.error = null
+    })
+    builder.addCase(deleteBookById.fulfilled, (state, action) => {
+      state.loading = false
+      if (state.data) {
+        state.data = state.data.filter((book) => book.id !== action.payload.id)
+      }
+    })
+    builder.addCase(deleteBookById.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.payload || "Failed to delete book"
     })
   },
 })

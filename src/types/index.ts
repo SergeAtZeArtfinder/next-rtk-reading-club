@@ -8,6 +8,7 @@ export interface Book {
   description: string
   images: string[]
   externalLink: string
+  userId: string
 }
 
 export interface NextApiErrorResponse {
@@ -19,4 +20,11 @@ export interface NextApiErrorResponse {
 export interface NextApiSuccessResponse<T> {
   success: true
   data: T
+}
+
+export type CloudinaryImage = {
+  publicId: string
+  url: string
+  width: number
+  height: number
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { ComponentProps } from "react"
+import React, { type ComponentProps } from "react"
 import { IoMdEye, IoMdEyeOff } from "react-icons/io"
 import clsx from "clsx"
 

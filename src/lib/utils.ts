@@ -1,6 +1,7 @@
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
-
 import { ZodError } from "zod"
+
+import type { Book as BookPrisma } from "@prisma/client"
+import type { Book } from "@/types"
 
 export const paths = {
   home: () => "/",
@@ -34,3 +35,13 @@ export const formatErrorMessage = (
 
   return message
 }
+
+export const formatBookDates = ({
+  createdAt,
+  updatedAt,
+  ...rest
+}: BookPrisma): Book => ({
+  ...rest,
+  createdAt: createdAt.toString(),
+  updatedAt: updatedAt.toString(),
+})

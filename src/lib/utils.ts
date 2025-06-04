@@ -5,7 +5,10 @@ import type { Book } from "@/types"
 
 export const paths = {
   home: () => "/",
-  about: () => "/about",
+  about: {
+    index: () => "/about",
+    installSetup: () => "/about/install-setup",
+  },
   addBook: () => "/book/create",
   editBook: (bookId: string) => `/book/${bookId}`,
   signin: () => "/signin",

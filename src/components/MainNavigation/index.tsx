@@ -36,7 +36,7 @@ const MainNavigation = (): JSX.Element => {
           </NavbarItem>
         )}
         <NavbarItem isActive>
-          <Link href={paths.about()}>about</Link>
+          <Link href={paths.about.index()}>about</Link>
         </NavbarItem>
       </NavbarContent>
 

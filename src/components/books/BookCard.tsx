@@ -48,7 +48,7 @@ const BookCard = ({ book }: Props): JSX.Element => {
         as="a"
         href={book.externalLink}
         target="_blank"
-        className="grid grid-rows-subgrid row-[span_5] hover:opacity-80 transition-opacity duration-200 ease-in-out relative"
+        className="grid grid-rows-subgrid row-[span_5] relative card-border-overlay transition-all hover:opacity-75 duration-200 ease-in-out"
       >
         <Image
           alt="Book cover"

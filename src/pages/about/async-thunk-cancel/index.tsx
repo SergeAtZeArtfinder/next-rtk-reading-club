@@ -4,28 +4,29 @@ import Head from "next/head"
 import type { NextPage } from "next"
 
 import Navbar from "@/components/about/Navbar"
-import AsyncThunkState from "@/documentation/AsyncThunkState.mdx"
+import AsyncThunkCancel from "@/documentation/AsyncThunkCancel.mdx"
 
-const AsyncThunkStatePage: NextPage = () => {
+const ReduxSsrPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>RTK Async Thunk State</title>
+        <title>Redux Async Thunk Cancel</title>
         <meta name="description" content="Next page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <h1 className="text-3xl font-bold text-center my-8">
-          RTK - Async thunk state
-        </h1>
+        <p className="text-3xl font-bold text-center my-8">
+          RTK - Async Thunk Cancel Actions & Calls
+        </p>
         <Navbar />
+
         <div className="prose dark:prose-invert max-w-none">
-          <AsyncThunkState />
+          <AsyncThunkCancel />
         </div>
       </main>
     </>
   )
 }
 
-export default AsyncThunkStatePage
+export default ReduxSsrPage

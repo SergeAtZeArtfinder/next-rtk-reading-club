@@ -1,0 +1,81 @@
+# Redux (RTK) Async Thunk cancel action or cancel call
+
+- in this section, we will look at how to handle the cancellation of asynchronous actions in our Redux slices.
+- The official [RTK documentation](https://redux-toolkit.js.org/api/createAsyncThunk#cancellation) on how to cancel async thunks.
+- How do we cancel the already dispatched action?
+- How do we cancel already dispatched api call?
+
+## Cancel Before Execution Using condition Option
+
+```typescript
+const fetchUserById = createAsyncThunk(
+  "users/fetchByIdStatus",
+  async (userId, thunkAPI) => {
+    const response = await userAPI.fetchById(userId)
+    return response.data
+  },
+  {
+    condition: (userId, { getState }) => {
+      const { users } = getState()
+      const fetchStatus = users.requests[userId]
+      if (fetchStatus === "fulfilled" || fetchStatus === "loading") {
+        // Cancel if already fetched or loading
+        return false
+      }
+    },
+  },
+)
+```
+
+## Cancel While Running Using the `abort()` Method on the Thunk Promise
+
+```tsx
+import React from "react"
+import { useDispatch } from "react-redux"
+
+import type { AppDispatch } from "@/lib/redux/store"
+
+import { fetchUserById } from "./slice"
+
+function MyComponent(props: { userId: string }) {
+  const dispatch = useDispatch<AppDispatch>()
+  React.useEffect(() => {
+    // Dispatching the thunk returns a promise
+    const promise = dispatch(fetchUserById(props.userId))
+    return () => {
+      // `createAsyncThunk` attaches an `abort()` method to the promise
+      promise.abort()
+    }
+  }, [props.userId])
+}
+```
+
+### ⚠️ Important Note on Actual Cancellation of Async API call
+
+- Calling `abort()` cancels the thunk's lifecycle actions and dispatches a rejection,
+  but does not automatically cancel the underlying async request (e.g., a fetch or axios call).
+
+- To cancel the actual async request, use the `AbortSignal` provided in `thunkAPI.signal` inside your thunk's payload creator.
+  For example, with fetch:
+
+```typescript
+export const fetchUserById = createAsyncThunk(
+  "users/fetchByIdStatus",
+  async (userId, thunkAPI) => {
+    const controller = new AbortController()
+    thunkAPI.signal.addEventListener("abort", () => controller.abort())
+
+    const response = await fetch(`/api/users/${userId}`, {
+      signal: controller.signal,
+    })
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user")
+    }
+
+    return response.json()
+  },
+)
+```
+
+more on that in the [RTK documentation](https://redux-toolkit.js.org/api/createAsyncThunk#listening-for-abort-events), same example using cancellation with`axios`

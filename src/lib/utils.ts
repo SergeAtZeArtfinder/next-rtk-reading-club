@@ -10,6 +10,7 @@ export const paths = {
     installSetup: () => "/about/install-setup",
     ssrPrefetch: () => "/about/ssr-prefetch",
     asyncThunkState: () => "/about/async-thunk-state",
+    asyncThunkCancel: () => "/about/async-thunk-cancel",
   },
   addBook: () => "/book/create",
   editBook: (bookId: string) => `/book/${bookId}`,

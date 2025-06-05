@@ -44,12 +44,13 @@ const BookCard = ({ book }: Props): JSX.Element => {
 
   return (
     <Card as="li" className="w-full grid grid-rows-subgrid row-[span_5]">
-      <CardBody
-        as="a"
-        href={book.externalLink}
-        target="_blank"
-        className="grid grid-rows-subgrid row-[span_5] relative card-border-overlay transition-all hover:opacity-75 duration-200 ease-in-out"
-      >
+      <CardBody className="grid grid-rows-subgrid row-[span_5] cursor-pointer relative card-border-overlay transition-all hover:opacity-75 duration-200 ease-in-out">
+        <a
+          href={book.externalLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute top-0 bottom-0 right-0 left-0"
+        />
         <Image
           alt="Book cover"
           radius="sm"

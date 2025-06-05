@@ -29,6 +29,12 @@ const navLinks = [
     href: paths.about.asyncThunkState(),
     label: "Async Thunk State",
   },
+
+  {
+    id: 5,
+    href: paths.about.asyncThunkCancel(),
+    label: "Async Thunk Cancel",
+  },
 ]
 
 const Navbar = (): JSX.Element => {

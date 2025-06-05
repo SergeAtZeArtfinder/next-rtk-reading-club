@@ -1,10 +1,10 @@
 "use client"
 
 import React from "react"
-import { Card, CardBody, Code, Button } from "@heroui/react"
-import clsx from "clsx"
-import Link from "next/link"
 import { useRouter } from "next/router"
+import Link from "next/link"
+import { Button } from "@heroui/react"
+import clsx from "clsx"
 
 import { paths } from "@/lib/utils"
 
@@ -18,6 +18,16 @@ const navLinks = [
     id: 2,
     href: paths.about.installSetup(),
     label: "RTK Install & Setup",
+  },
+  {
+    id: 3,
+    href: paths.about.ssrPrefetch(),
+    label: "SSR Prefetch",
+  },
+  {
+    id: 4,
+    href: paths.about.asyncThunkState(),
+    label: "Async Thunk State",
   },
 ]
 

@@ -8,6 +8,8 @@ export const paths = {
   about: {
     index: () => "/about",
     installSetup: () => "/about/install-setup",
+    ssrPrefetch: () => "/about/ssr-prefetch",
+    asyncThunkState: () => "/about/async-thunk-state",
   },
   addBook: () => "/book/create",
   editBook: (bookId: string) => `/book/${bookId}`,

@@ -31,15 +31,15 @@ const AboutPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1 className="text-3xl font-bold text-center my-8">
-          RTK ( Redux Toolkit )
-        </h1>
+        <p className="text-3xl font-bold text-center my-8">
+          RTK ( Redux Toolkit ) - About
+        </p>
         <Navbar />
+        <h1 className="text-4xl font-bold my-8">
+          Redux Toolkit is the official, recommended approach for writing Redux
+          logic.
+        </h1>
         <section>
-          <Text>
-            Redux Toolkit is the official, recommended approach for writing
-            Redux logic.
-          </Text>
           <Text>
             It simplifies the standard Redux workflow by providing powerful
             utilities like <Code>createSlice</Code>, <Code>configureStore</Code>

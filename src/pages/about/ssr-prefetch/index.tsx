@@ -4,29 +4,29 @@ import Head from "next/head"
 import type { NextPage } from "next"
 
 import Navbar from "@/components/about/Navbar"
-import Setup from "@/documentation/Setup.mdx"
+import ReduxSSR from "@/documentation/ReduxSSR.mdx"
 
-const InstallSetupPage: NextPage = () => {
+const ReduxSsrPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>RTK Install & Setup</title>
+        <title>Redux Prefetch SSR</title>
         <meta name="description" content="Next page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
         <p className="text-3xl font-bold text-center my-8">
-          RTK - Install and setup
+          RTK - Prefetch on SSR
         </p>
         <Navbar />
 
         <div className="prose dark:prose-invert max-w-none">
-          <Setup />
+          <ReduxSSR />
         </div>
       </main>
     </>
   )
 }
 
-export default InstallSetupPage
+export default ReduxSsrPage

@@ -13,6 +13,7 @@
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,mjs,cjs,json}'",
     "check-types": "npx tsc --pretty --noEmit",
     "postinstall": "prisma generate",
+    "postbuild": "npx tsx src/lib/scripts/generate-sitemap.ts",
     "db-migrate": "npx prisma migrate dev",
     "db-studio": "npx prisma studio",
     "db-seed": "npx tsx ./src/lib/db/seed.ts"
@@ -50,6 +51,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "dotenv": "^16.5.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",

@@ -11,12 +11,18 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,mjs,cjs,json}'",
+    "check-format": "prettier --check 'src/**/*.{js,jsx,ts,tsx,mjs,cjs,json}'",
+    "check-lint": "eslint src -c .eslintrc.json --ext .js,.jsx,.ts,.tsx",
     "check-types": "npx tsc --pretty --noEmit",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:ci": "vitest --run --reporter=verbose",
     "postinstall": "prisma generate",
     "postbuild": "npx tsx src/lib/scripts/generate-sitemap.ts",
     "db-migrate": "npx prisma migrate dev",
     "db-studio": "npx prisma studio",
-    "db-seed": "npx tsx ./src/lib/db/seed.ts"
+    "db-seed": "npx tsx ./src/lib/db/seed.ts",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@heroui/react": "^2.7.8",
@@ -47,17 +53,26 @@
     "zod": "^3.24.4"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/formidable": "^3.4.5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@vitejs/plugin-react": "^4.5.1",
+    "@vitest/ui": "^3.2.2",
     "dotenv": "^16.5.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
+    "husky": "^8.0.0",
+    "jsdom": "^26.1.0",
     "postcss": "^8",
     "prettier": "^3.5.3",
     "prisma": "^6.7.0",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.2"
   }
 }

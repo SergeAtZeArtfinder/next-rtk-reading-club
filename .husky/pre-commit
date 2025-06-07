@@ -1,0 +1,64 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+
+echo '🛠️ ***************************************************************************** 🛠️\n'
+echo '\n 🏗️👷 Styling, testing and building your project before committing \n'
+echo '🛠️ ***************************************************************************** 🛠️\n'
+
+# Check Prettier standards
+echo 'Checking Prettier standards... 👀 👀 👀\n'
+npm run check-format ||
+(
+    echo ' \n🤢🤮🤢🤮 Its F**KING RAW - Your styling looks disgusting. 🤢🤮🤢🤮
+            Prettier Check Failed. Run `npm run format`, add changes and try commit again. \n';
+    false;
+)
+
+
+# Check ESLint Standards
+echo 'Checking ESLint standards... 👀 👀 👀\n'
+npm run check-lint ||
+(
+        echo ' \n😤🏀👋😤 Get that weak s**t out of here! 😤🏀👋😤 
+                ESLint Check Failed. Make the required changes listed above, add changes, re-run `npm run check-lint` and try to commit again. \n'
+        false; 
+)
+
+# Check tsconfig standards
+echo 'Checking tsconfig standards... 👀 👀 👀\n'
+npm run check-types ||
+(
+    echo '\n 🤡😂❌🤡 Failed Type check. 🤡😂❌🤡
+            Are you seriously trying to write that? Make the changes required above. Re-run `npm run check-types` to be sure, then try to commit again.\n'
+    false;
+)
+
+# Run all automation tests
+echo 'Running automation tests... ⚙️ ⚙️ ⚙️\n'
+npm run test:ci || 
+(
+    echo '\n 💥😜❌🤡 Failed Automation Tests. 🤡😂❌💥😜
+            Whats going on man??? Make the changes required above. Re-run `npm run test:ci` to be sure, then try to commit again.\n'
+    false;
+)
+
+# If everything passes... Now we can commit
+echo '🛠️ ***************************************************************************** 🛠️\n'
+
+echo ' \n 🤔🤔🤔🤔... Alright, sit tight 🤞... Code looks good to me... Trying to build now. 🤔🤔🤔🤔\n'
+
+echo '🛠️ ***************************************************************************** 🛠️\n'
+
+npm run build ||
+(
+    echo ' \n❌👷🔨❌ Better call Bob Marley... Because your build failed ❌👷🔨❌
+            Next build failed: View the errors above to see why. 
+    \n'
+    false;
+)
+
+# If everything passes... Now we can commit
+echo '🛠️ ***************************************************************************** 🛠️\n'
+echo '✅✅✅✅ Good man! You win this time... I am committing this now. ✅✅✅✅\n'
+echo '🛠️ ***************************************************************************** 🛠️ \n'

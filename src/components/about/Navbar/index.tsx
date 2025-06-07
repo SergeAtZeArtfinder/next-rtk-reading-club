@@ -8,7 +8,7 @@ import clsx from "clsx"
 
 import { paths } from "@/lib/utils"
 
-const navLinks = [
+export const navLinks = [
   {
     id: 1,
     href: paths.about.index(),
@@ -47,6 +47,7 @@ const Navbar = (): JSX.Element => {
           <li key={link.id} aria-label={`About ${link.label}`}>
             <Button
               as={Link}
+              role="link"
               size="sm"
               variant="bordered"
               color="secondary"

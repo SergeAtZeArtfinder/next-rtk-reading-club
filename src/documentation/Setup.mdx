@@ -10,7 +10,7 @@ npm install @reduxjs/toolkit react-redux
 npm install next-redux-wrapper
 ```
 
-## Redux store setup
+## Redux store setup and Next Redux wrapper setup
 
 code example can be seen at:
 
@@ -24,41 +24,27 @@ code example can be seen at:
 
 ```typescript
 // src/store/index.ts
-import {(configureStore, combineReducers)}
-from "@reduxjs/toolkit" import {exampleSlice} from "../slices/exampleSlice"
-import {booksSlice} from "../slices/booksSlice"
+import { configureStore, combineReducers } from "@reduxjs/toolkit"
+import { createWrapper } from "next-redux-wrapper"
+import { exampleSlice } from "../slices/exampleSlice"
+import { booksSlice } from "../slices/booksSlice"
 
 const rootReducer = combineReducers({
-example: exampleSlice.reducer,
-books: booksSlice.reducer,
+  example: exampleSlice.reducer,
+  books: booksSlice.reducer,
 })
 
-export const store = configureStore({
-  reducer: rootReducer,
-})
+const makeStore = () => {
+  return configureStore({
+    reducer: rootReducer,
+  })
+}
 
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
-```
+export const wrapper = createWrapper(makeStore)
 
-## Redux wrapper setup
+export type RootState = ReturnType<ReturnType<typeof makeStore>["getState"]>
+export type AppDispatch = ReturnType<typeof makeStore>["dispatch"]
 
-code example can be seen at:
-
-<a
-  href="https://github.com/SergeAtZeArtfinder/next-rtk-reading-club/blob/main/src/lib/redux/store/wrapper.ts"
-  target="_blank"
-  rel="noopener noreferrer"
->
-  src/store/wrapper.ts{" "}
-</a>
-
-```typescript
-// src/store/wrapper.ts
-import { createWrapper } from "next-redux-wrapper"
-import { store } from "./index"
-
-export const wrapper = createWrapper(() => store)
 ```
 
 ## Redux wrapper as provider setup
@@ -75,19 +61,23 @@ code example can be seen at:
 
 ```typescript
 // src/pages/_app.tsx
+import { Provider as ReduxProvider } from "react-redux"
 import { AppProps } from "next/app"
-import { wrapper } from "../store/wrapper"
+import { wrapper } from "../store"
 import { store } from "../store/index"
 import "../styles/globals.css"
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, ...rest }: AppProps) {
+  const { store, props } = wrapper.useWrappedStore(rest)
+
   return (
-      <Component {...pageProps} />
+    <ReduxProvider store={store}>
+      <Component  {...props.pageProps} />
+    </ReduxProvider>
   )
 }
 
-// the wrapper makes sure that the Provider and store is available to all components
-export default wrapper.withRedux(MyApp)
+export default MyApp
 ```
 
 **Note**: there is an alternative way to set up the Redux provider using the `Provider`

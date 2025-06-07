@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { signIn } from "next-auth/react"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
@@ -15,6 +15,7 @@ import {
   Form,
   addToast,
 } from "@heroui/react"
+import { useRouter } from "next/router"
 
 import { paths } from "@/lib/utils"
 import { schemaLogin } from "@/lib/validation"
@@ -22,6 +23,7 @@ import AuthFormFooter from "../AuthFormFooter"
 import EyeIconButton from "../EyeIconButton"
 
 const SignInForm = (): JSX.Element => {
+  const router = useRouter()
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const form = useForm<z.infer<typeof schemaLogin>>({
     resolver: zodResolver(schemaLogin),
@@ -51,6 +53,18 @@ const SignInForm = (): JSX.Element => {
       })
     }
   }
+
+  useEffect(() => {
+    if (router.query.error && typeof router.query.error === "string") {
+      addToast({
+        title: "Signin failed",
+        description: router.query.error,
+        color: "danger",
+        timeout: 5000,
+      })
+    }
+  }, [router.query.error])
+
   return (
     <Card className="w-full max-w-lg mx-auto mt-10">
       <CardHeader className="flex flex-col items-center justify-center">

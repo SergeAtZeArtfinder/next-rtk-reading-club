@@ -20,9 +20,9 @@ const ReduxSsrPage: NextPage = () => {
       </p>
       <Navbar />
 
-      <div className="prose dark:prose-invert max-w-none">
+      <section className="prose dark:prose-invert max-w-none">
         <AsyncThunkCancel />
-      </div>
+      </section>
     </>
   )
 }

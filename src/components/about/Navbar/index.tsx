@@ -41,10 +41,10 @@ const Navbar = (): JSX.Element => {
   const router = useRouter()
 
   return (
-    <nav className="my-8">
-      <ul className="flex gap-2">
+    <nav className="my-8" aria-label="About navigation">
+      <ul className="flex gap-2" aria-label="About navigation links">
         {navLinks.map((link) => (
-          <li key={link.id}>
+          <li key={link.id} aria-label={`About ${link.label}`}>
             <Button
               as={Link}
               size="sm"

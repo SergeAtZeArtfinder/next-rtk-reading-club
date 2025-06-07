@@ -19,9 +19,10 @@ const AsyncThunkStatePage: NextPage = () => {
         RTK - Async thunk state
       </h1>
       <Navbar />
-      <div className="prose dark:prose-invert max-w-none">
+
+      <section className="prose dark:prose-invert max-w-none">
         <AsyncThunkState />
-      </div>
+      </section>
     </>
   )
 }

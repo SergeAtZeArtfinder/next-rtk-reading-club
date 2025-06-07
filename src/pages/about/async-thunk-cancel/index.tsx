@@ -11,20 +11,18 @@ const ReduxSsrPage: NextPage = () => {
     <>
       <Head>
         <title>Redux Async Thunk Cancel</title>
-        <meta name="description" content="Next page" />
+        <meta name="description" content="Redux Async Thunk Cancel" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <p className="text-3xl font-bold text-center my-8">
-          RTK - Async Thunk Cancel Actions & Calls
-        </p>
-        <Navbar />
+      <p className="text-3xl font-bold text-center my-8">
+        RTK - Async Thunk Cancel Actions & Calls
+      </p>
+      <Navbar />
 
-        <div className="prose dark:prose-invert max-w-none">
-          <AsyncThunkCancel />
-        </div>
-      </main>
+      <div className="prose dark:prose-invert max-w-none">
+        <AsyncThunkCancel />
+      </div>
     </>
   )
 }

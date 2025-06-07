@@ -11,20 +11,18 @@ const ReduxSsrPage: NextPage = () => {
     <>
       <Head>
         <title>Redux Prefetch SSR</title>
-        <meta name="description" content="Next page" />
+        <meta name="description" content="Redux Prefetch SSR" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <p className="text-3xl font-bold text-center my-8">
-          RTK - Prefetch on SSR
-        </p>
-        <Navbar />
+      <p className="text-3xl font-bold text-center my-8">
+        RTK - Prefetch on SSR
+      </p>
+      <Navbar />
 
-        <div className="prose dark:prose-invert max-w-none">
-          <ReduxSSR />
-        </div>
-      </main>
+      <div className="prose dark:prose-invert max-w-none">
+        <ReduxSSR />
+      </div>
     </>
   )
 }

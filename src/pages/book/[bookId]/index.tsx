@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth"
-
+import Head from "next/head"
 import { useRouter } from "next/router"
 import { useSelector } from "react-redux"
 
@@ -27,6 +27,12 @@ const EditBookPage: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>Edit Book</title>
+        <meta name="description" content="Edit Book" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
       <h1 className="text-3xl font-bold text-center my-8">Edit Book</h1>
       <BookForm book={book} />
     </>

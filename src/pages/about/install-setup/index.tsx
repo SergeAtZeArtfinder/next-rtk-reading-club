@@ -11,20 +11,18 @@ const InstallSetupPage: NextPage = () => {
     <>
       <Head>
         <title>RTK Install & Setup</title>
-        <meta name="description" content="Next page" />
+        <meta name="description" content="RTK Install & Setup" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <p className="text-3xl font-bold text-center my-8">
-          RTK - Install and setup
-        </p>
-        <Navbar />
+      <p className="text-3xl font-bold text-center my-8">
+        RTK - Install and setup
+      </p>
+      <Navbar />
 
-        <div className="prose dark:prose-invert max-w-none">
-          <Setup />
-        </div>
-      </main>
+      <div className="prose dark:prose-invert max-w-none">
+        <Setup />
+      </div>
     </>
   )
 }

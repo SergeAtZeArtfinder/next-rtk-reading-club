@@ -11,19 +11,17 @@ const AsyncThunkStatePage: NextPage = () => {
     <>
       <Head>
         <title>RTK Async Thunk State</title>
-        <meta name="description" content="Next page" />
+        <meta name="description" content="RTK Async Thunk State" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <h1 className="text-3xl font-bold text-center my-8">
-          RTK - Async thunk state
-        </h1>
-        <Navbar />
-        <div className="prose dark:prose-invert max-w-none">
-          <AsyncThunkState />
-        </div>
-      </main>
+      <h1 className="text-3xl font-bold text-center my-8">
+        RTK - Async thunk state
+      </h1>
+      <Navbar />
+      <div className="prose dark:prose-invert max-w-none">
+        <AsyncThunkState />
+      </div>
     </>
   )
 }

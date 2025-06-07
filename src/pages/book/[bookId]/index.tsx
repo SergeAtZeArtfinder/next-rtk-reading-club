@@ -9,7 +9,7 @@ import type { Book } from "@/types"
 
 import { getAllBooks } from "@/lib/db/books"
 import { setBooks } from "@/lib/redux/slices/booksSlice"
-import { wrapper } from "@/lib/redux/store/wrapper"
+import { wrapper } from "@/lib/redux/store"
 import { authOptions } from "@/lib/auth"
 import BookForm from "@/components/forms/BookForm"
 import { isUserAuthorised } from "@/lib/db"

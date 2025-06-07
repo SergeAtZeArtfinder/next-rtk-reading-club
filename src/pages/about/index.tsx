@@ -3,7 +3,7 @@ import Head from "next/head"
 import type { NextPage } from "next"
 
 import Navbar from "@/components/about/Navbar"
-import AboutRTK from "../../documentation/AboutRTK.mdx"
+import AboutRTK from "@/documentation/AboutRTK.mdx"
 
 const AboutPage: NextPage = () => {
   return (

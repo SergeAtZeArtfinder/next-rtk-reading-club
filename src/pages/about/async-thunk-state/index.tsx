@@ -4,7 +4,7 @@ import Head from "next/head"
 import type { NextPage } from "next"
 
 import Navbar from "@/components/about/Navbar"
-import AsyncThunkState from "../../../documentation/AsyncThunkState.mdx"
+import AsyncThunkState from "@/documentation/AsyncThunkState.mdx"
 
 const AsyncThunkStatePage: NextPage = () => {
   return (

@@ -4,7 +4,7 @@ import Head from "next/head"
 import type { NextPage } from "next"
 
 import Navbar from "@/components/about/Navbar"
-import ReduxSSR from "../../../documentation/ReduxSSR.mdx"
+import ReduxSSR from "@/documentation/ReduxSSR.mdx"
 
 const ReduxSsrPage: NextPage = () => {
   return (

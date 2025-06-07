@@ -4,7 +4,7 @@ import Script from "next/script"
 import type { GetServerSideProps, NextPage } from "next"
 import type { Book } from "@/types"
 
-import { wrapper } from "@/lib/redux/store/wrapper"
+import { wrapper } from "@/lib/redux/store"
 import { setBooks } from "@/lib/redux/slices/booksSlice"
 import { getJsonSchema } from "@/lib/seo/homepage"
 import { getAllBooks } from "@/lib/db/books"

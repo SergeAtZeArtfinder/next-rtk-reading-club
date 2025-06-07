@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { signIn } from "next-auth/react"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
@@ -101,6 +101,17 @@ const SignupForm = (): JSX.Element => {
     }
   }
 
+  useEffect(() => {
+    if (router.query.error && typeof router.query.error === "string") {
+      addToast({
+        title: "Signup failed",
+        description: router.query.error,
+        color: "danger",
+        timeout: 5000,
+      })
+    }
+  }, [router.query.error])
+
   return (
     <Card className="w-full max-w-lg mx-auto mt-10">
       <CardHeader className="flex flex-col items-center justify-center">
@@ -172,7 +183,7 @@ const SignupForm = (): JSX.Element => {
             color="secondary"
             className="disabled:opacity-75 disabled:cursor-not-allowed"
           >
-            Login
+            Sign Up
           </Button>
 
           <Button

@@ -11,6 +11,8 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,mjs,cjs,json}'",
+    "check-format": "prettier --check 'src/**/*.{js,jsx,ts,tsx,mjs,cjs,json}'",
+    "check-lint": "eslint src -c .eslintrc.json --ext .js,.jsx,.ts,.tsx",
     "check-types": "npx tsc --pretty --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",
@@ -19,7 +21,8 @@
     "postbuild": "npx tsx src/lib/scripts/generate-sitemap.ts",
     "db-migrate": "npx prisma migrate dev",
     "db-studio": "npx prisma studio",
-    "db-seed": "npx tsx ./src/lib/db/seed.ts"
+    "db-seed": "npx tsx ./src/lib/db/seed.ts",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@heroui/react": "^2.7.8",
@@ -63,6 +66,7 @@
     "dotenv": "^16.5.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
+    "husky": "^8.0.0",
     "jsdom": "^26.1.0",
     "postcss": "^8",
     "prettier": "^3.5.3",

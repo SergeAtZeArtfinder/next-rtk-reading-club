@@ -4,7 +4,7 @@ import Head from "next/head"
 import type { NextPage } from "next"
 
 import Navbar from "@/components/about/Navbar"
-import Setup from "@/documentation/Setup.mdx"
+import Setup from "../../../documentation/Setup.mdx"
 
 const InstallSetupPage: NextPage = () => {
   return (

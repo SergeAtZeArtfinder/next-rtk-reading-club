@@ -20,7 +20,7 @@ import { MdDeleteOutline } from "react-icons/md"
 import { useDispatch } from "react-redux"
 import { useRouter } from "next/router"
 
-import type { AppDispatch } from "@/lib/redux/store/index"
+import type { AppDispatch } from "@/lib/redux/store"
 import type { Book } from "@/types"
 
 import { useUploadedImages } from "@/lib/hooks/useUploadImages"
@@ -63,6 +63,7 @@ const BookForm = ({ book }: Props): JSX.Element => {
         bookId: book?.id || "",
       }
       const updateAction = await dispatch(editBook(input))
+
       if (editBook.fulfilled.match(updateAction)) {
         addToast({
           title: "Success",
@@ -87,9 +88,9 @@ const BookForm = ({ book }: Props): JSX.Element => {
        * the dispatch and check the result using the returned action’s meta
        * and payload properties.
        */
-      const action = await dispatch(postNewBook(values))
+      const createAction = await dispatch(postNewBook(values))
 
-      if (postNewBook.fulfilled.match(action)) {
+      if (postNewBook.fulfilled.match(createAction)) {
         addToast({
           title: "Success",
           description: "Book created successfully",
@@ -100,7 +101,7 @@ const BookForm = ({ book }: Props): JSX.Element => {
       } else {
         addToast({
           title: "Error",
-          description: action.payload || "Something went wrong",
+          description: createAction.payload || "Something went wrong",
           color: "danger",
           timeout: 2000,
         })

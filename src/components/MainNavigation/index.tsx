@@ -19,9 +19,10 @@ const MainNavigation = (): JSX.Element => {
   const { data: session } = useSession()
   const isLoggedIn = !!session?.user
   return (
-    <Navbar isBordered>
-      <NavbarBrand>
+    <Navbar isBordered aria-label="Main navigation">
+      <NavbarBrand aria-label="Reading Clubb logo">
         <Link
+          aria-label="Go to Reading Clubb homepage"
           href={paths.home()}
           className="border border-default-200 rounded-xl p-2 min-w-[80px] flex gap-2 hover:bg-primary-100 transition-colors duration-200"
         >
@@ -29,28 +30,40 @@ const MainNavigation = (): JSX.Element => {
           <p className="font-bold text-inherit">Clubb</p>
         </Link>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      <NavbarContent
+        className="hidden sm:flex gap-4"
+        justify="center"
+        aria-label="Main navigation page links"
+      >
         {isLoggedIn && (
-          <NavbarItem>
+          <NavbarItem aria-label="Add new Book page link">
             <Link href={paths.addBook()}>add book</Link>
           </NavbarItem>
         )}
-        <NavbarItem isActive>
-          <Link href={paths.about()}>about</Link>
+        <NavbarItem isActive aria-label="About Redux RTK page link">
+          <Link href={paths.about.index()}>about</Link>
         </NavbarItem>
       </NavbarContent>
 
-      <NavbarContent justify="end">
-        <ThemeSwitcher />
+      <NavbarContent justify="end" aria-label="Main navigation user actions">
+        <NavbarItem aria-label="Toggle theme switcher Dark/Light">
+          <ThemeSwitcher />
+        </NavbarItem>
         {isLoggedIn ? (
           <>
-            <NavbarItem className="hidden lg:flex">
+            <NavbarItem
+              className="hidden lg:flex"
+              aria-label="User options menu"
+            >
               <UserMenu user={session.user} />
             </NavbarItem>
           </>
         ) : (
           <>
-            <NavbarItem className="hidden lg:flex">
+            <NavbarItem
+              className="hidden lg:flex"
+              aria-label="Login and Sign up buttons"
+            >
               <Button
                 as={Link}
                 color="secondary"

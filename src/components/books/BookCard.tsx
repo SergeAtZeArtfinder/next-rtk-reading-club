@@ -43,24 +43,42 @@ const BookCard = ({ book }: Props): JSX.Element => {
   }
 
   return (
-    <Card as="li" className="w-full grid grid-rows-subgrid row-[span_5]">
-      <CardBody
-        as="a"
-        href={book.externalLink}
-        target="_blank"
-        className="grid grid-rows-subgrid row-[span_5] hover:opacity-80 transition-opacity duration-200 ease-in-out relative"
-      >
+    <Card
+      as="li"
+      className="w-full grid grid-rows-subgrid row-[span_5]"
+      aria-label={book.title}
+    >
+      <CardBody className="grid grid-rows-subgrid row-[span_5] cursor-pointer relative card-border-overlay transition-all hover:opacity-75 duration-200 ease-in-out">
+        <a
+          href={book.externalLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute top-0 bottom-0 right-0 left-0"
+          aria-label={`Read ${book.title} on external link`}
+        />
         <Image
-          alt="Book cover"
+          alt={`Book cover of ${book.title}`}
+          title={`Book cover of ${book.title}`}
           radius="sm"
           src={book.images[0]}
           width={300}
           className="aspect-square object-cover"
         />
-        <p className="text-xl font-semibold">{book.title}</p>
-        <p className="text-md text-secondary">Genre: {book.genre}</p>
-        <p className="text-lg text-secondary">By {book.author}</p>
-        <p className="text-small text-default-500">{book.description}</p>
+        <p className="text-xl font-semibold" aria-label="Title of the book">
+          {book.title}
+        </p>
+        <p className="text-md text-secondary" aria-label="Genre">
+          Genre: {book.genre}
+        </p>
+        <p className="text-lg text-secondary" aria-label="Author written by">
+          By {book.author}
+        </p>
+        <p
+          className="text-small text-default-500"
+          aria-label="A brief description"
+        >
+          {book.description}
+        </p>
         {isOwner && (
           <div className="absolute top-4 right-4 z-20 flex gap-2">
             <Button
@@ -71,6 +89,7 @@ const BookCard = ({ book }: Props): JSX.Element => {
               color="warning"
               className=" disabled:bg-gray-500 px-2"
               disabled={loading}
+              aria-label="Edit book"
             >
               Edit
             </Button>
@@ -81,6 +100,7 @@ const BookCard = ({ book }: Props): JSX.Element => {
               className=" disabled:bg-gray-500 px-2"
               disabled={loading}
               startContent={<MdDeleteOutline size={24} />}
+              aria-label="Delete book"
             >
               Delete
             </Button>

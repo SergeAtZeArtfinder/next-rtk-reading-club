@@ -30,6 +30,7 @@ const ThemeSwitcher = (): JSX.Element | null => {
           theme === "dark" ? "to-yellow-500" : "to-blue-500",
         )}
         onClick={toggleTheme}
+        aria-label={`Switch to ${theme === "dark" ? "light" : "dark"}`}
       >
         {theme === "light" ? <span>☾</span> : <span>☀️</span>}
       </button>

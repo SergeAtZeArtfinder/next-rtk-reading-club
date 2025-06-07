@@ -28,7 +28,10 @@ const BooksList = (): JSX.Element => {
     <div className="mt-8">
       {books.loading && <p>Loading...</p>}
       {books.error && <p>{books.error}</p>}
-      <ul className="w-full grid gap-2 grid-cols-gallery">
+      <ul
+        className="w-full grid gap-2 grid-cols-gallery"
+        aria-label="Books list"
+      >
         {books.data?.map((book) => <BookCard key={book.id} book={book} />)}
       </ul>
     </div>

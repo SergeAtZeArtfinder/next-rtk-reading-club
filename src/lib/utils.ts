@@ -5,7 +5,13 @@ import type { Book } from "@/types"
 
 export const paths = {
   home: () => "/",
-  about: () => "/about",
+  about: {
+    index: () => "/about",
+    installSetup: () => "/about/install-setup",
+    ssrPrefetch: () => "/about/ssr-prefetch",
+    asyncThunkState: () => "/about/async-thunk-state",
+    asyncThunkCancel: () => "/about/async-thunk-cancel",
+  },
   addBook: () => "/book/create",
   editBook: (bookId: string) => `/book/${bookId}`,
   signin: () => "/signin",

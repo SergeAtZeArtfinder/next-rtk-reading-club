@@ -72,7 +72,11 @@ export const editBook = createAsyncThunk<
   return data.data as Book
 })
 
-export const fetchBooks = createAsyncThunk(
+export const fetchBooks = createAsyncThunk<
+  Book[], // Return type on success
+  undefined, // Argument type, can be anything or undefined
+  { rejectValue: string } // Rejection type
+>(
   "books/fetchBooks",
   /**
    * @description fetch books from server, an example of async thunk RTK action

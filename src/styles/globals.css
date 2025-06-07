@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .card-border-overlay {
+    @apply overflow-hidden before:pointer-events-none before:absolute before:inset-0 before:z-30 before:rounded-xl before:border-secondary before:hover:border-2 has-[:focus-visible]:focus-within:before:border-2 focus-visible:before:border-2;
+  }
+}

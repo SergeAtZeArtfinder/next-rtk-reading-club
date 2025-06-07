@@ -1,0 +1,188 @@
+# Redux (RTK) Async Thunk state
+
+- in this section, we will look at the use of Redux Toolkit's `createAsyncThunk` [RTK official docs](https://redux-toolkit.js.org/api/createAsyncThunk) that handles asynchronous actions in our Redux slices.
+- we will also see how to handle the state of these asynchronous actions in our Redux slices.
+- in our example, we will use the `fetchBooks` async thunk to fetch books from an API and handle the loading and error states.
+
+As we see in the code example below, we can use the `createAsyncThunk` to create an async thunk action that:
+
+- fetches books from an API and handles the loading and error states.
+- creates new book posting to an API and handles the loading and error states.
+- edits a book by ID posting to an API and handles the loading and error states.
+- deletes a book by ID posting to an API and handles the loading and error states.
+
+🤷‍♂️ The dilemma is how to track the state of these asynchronous actions in our `books` Redux slice,
+because we will want to know the loading and error states for each of these actions.
+
+```typescript
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit"
+// ... other imports
+
+interface BooksState {
+  data: Book[] | null
+  loading: boolean
+  error: string | null
+}
+
+const initialState: BooksState = {
+  data: null,
+  loading: false,
+  error: null,
+}
+
+export const fetchBooks = createAsyncThunk<
+  Book[], // Return type on success
+  undefined, // Argument type, can be `undefined` for this case
+  { rejectValue: string } // Rejection type, string as error message
+>("books/fetchBooks", async (arg, thunkApi) => {
+  const res = await fetch("/api/books")
+  if (!res.ok) {
+    const errorResponse = await res.json()
+    throw new Error(errorResponse.error || "Failed to fetch books")
+  }
+  const data = await res.json()
+  return data.data as Book[]
+})
+
+export const postNewBook = createAsyncThunk<
+  Book, // Return type on success
+  z.infer<typeof schemaCreateBook>, // Argument type - input values to create a new book
+  { rejectValue: string } // Rejection type, string as error message
+>("books/postNewBook", async (input, thunkApi) => {
+  const res = await fetch("/api/books", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(input),
+  })
+  const data = await res.json()
+  if (!res.ok || !data.success) {
+    return thunkApi.rejectWithValue(data.error || "Failed to create book")
+  }
+
+  return data.data as Book
+})
+
+// ... other async thunks for edit and delete
+```
+
+#### For ease of demonstration, we will use the `fetchBooks` and `postNewBook` async actions for now.
+
+#### These async thunk actions have a predefined state that we can track in our Redux slice
+
+#### As you have noticed there is a generic interface for the `createAsyncThunk` function that allows us to define:
+
+- the return type on success,
+- the action's argument type,
+- and the rejection type, ( for example `string` as an error message ).
+
+#### Also, we can see that we are using the `thunkApi` to handle the rejection case by returning a custom error message.
+
+btw, the `thunkApi` is an object that contains various utilities for working with thunks, including `dispatch`, `getState`, and `rejectWithValue` and plenty of other useful stuff.
+more about could be found in the [RTK official docs](https://redux-toolkit.js.org/api/createAsyncThunk#thunkapi).
+
+```typescript
+const booksSlice = createSlice({
+  name: "books",
+  initialState,
+  reducers: {
+    // ... reducers to handle synchronous actions
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchBooks.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(fetchBooks.fulfilled, (state, action) => {
+        state.data = action.payload
+        state.loading = false
+      })
+      .addCase(fetchBooks.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.error.message || "Failed to fetch books"
+      })
+      .addCase(postNewBook.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(postNewBook.fulfilled, (state, action) => {
+        if (state.data) {
+          state.data.push(action.payload)
+        } else {
+          state.data = [action.payload]
+        }
+        state.loading = false
+      })
+      .addCase(postNewBook.rejected, (state, action) => {
+        state.loading = false
+        state.error = action.payload || "Failed to create book"
+      })
+  },
+})
+```
+
+#### In the `extraReducers` section, we handle the state of the async thunk actions:
+
+- `fetchBooks.pending`: sets the loading state to `true` and clears any previous error.
+- `fetchBooks.fulfilled`: sets the data to the fetched books, sets loading to `false`, and clears any previous error.
+- `fetchBooks.rejected`: sets loading to `false` and sets the error message from the action payload or a default message.
+- `postNewBook.pending`: sets the loading state to `true` and clears any previous error.
+- `postNewBook.fulfilled`: adds the newly created book to the data array, sets loading to `false`, and clears any previous error.
+- `postNewBook.rejected`: sets loading to `false` and sets the error message from the action payload or a default message.
+
+#### To mention, this state update is using `immer` under the hood, so we can mutate the state directly, the outcome will be an immutable state update.
+
+Immer is a library [Why Immer - RTK docs](https://redux-toolkit.js.org/usage/immer-reducers#why-immer-is-built-in) that allows us to work with immutable state in a more convenient way, and it is used by default in Redux Toolkit.
+and the library is useful for handling large and complex objects immutably without the need to write complex code to create new objects.
+
+## It still needs to answer a question on now shall I distinguish between the different async actions state in my Redux slice?
+
+Let us take an example at:
+
+<a
+  href="https://github.com/SergeAtZeArtfinder/next-rtk-reading-club/blob/main/src/components/forms/BookForm/index.tsx"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  src/components/forms/BookForm/index.tsx
+</a>
+file, where we have a form to create a new book. To handle post-submit logic
+(like navigation or showing a toast)
+
+```tsx
+import { useDispatch } from "react-redux"
+import type { AppDispatch } from "@/lib/redux/store"
+import { postNewBook } from "@/lib/redux/slices/booksSlice"
+// ... other imports
+
+const BookForm = ({ book }: Props): JSX.Element => {
+  const dispatch = useDispatch<AppDispatch>()
+  const form = useForm<z.infer<typeof schemaCreateBook>>({
+    /** ...form options */
+  })
+  // ... other form logic
+  const onSubmit = async (values: z.infer<typeof schemaCreateBook>) => {
+    // ... form validation and submission logic...
+
+    // 👋 HERE: 👇
+    const createAction = await dispatch(postNewBook(values))
+
+    if (postNewBook.fulfilled.match(createAction)) {
+      addToast({
+        title: "Success",
+        description: "Book created successfully",
+        color: "success",
+      })
+      router.push("/")
+    } else {
+      addToast({
+        title: "Error",
+        description: createAction.payload || "Something went wrong",
+        color: "danger",
+      })
+    }
+  }
+}
+```

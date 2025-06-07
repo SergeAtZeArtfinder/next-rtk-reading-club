@@ -1,0 +1,109 @@
+# Redux (RTK) with Next.js SSR prefetch state
+
+- as we have seen in the previous example, we can use the `next-redux-wrapper` to set up Redux with Next.js.
+- as we have seen in the <a href="https://github.com/SergeAtZeArtfinder/next-rtk-reading-club/blob/main/src/lib/redux/slices/booksSlice.ts" target='_blank' rel="noopener noreferrer">code </a>:
+
+```typescript
+// src/slices/booksSlice.ts
+import { HYDRATE } from "next-redux-wrapper"
+// ... other code
+const booksSlice = createSlice({
+  //...
+  extraReducers: (builder) => {
+    builder.addCase(HYDRATE, (state, action) => {
+      // Merge the server state with the client state
+      return {
+        ...state,
+        ...action.payload.books,
+      }
+    })
+    // ... other cases
+  },
+})
+```
+
+- this is how we can handle the `HYDRATE` action to merge the server state for `books` for example with the client state.
+- it could be used to prefetch the state from the server and merge it with the client state.
+- it could be any other slice, and we can use the same pattern to handle the `HYDRATE` action for any other slice.
+
+## How shall we use it to prefetch the state in our SSR phase of that rendering?
+
+- we can use the `getServerSideProps` function to prefetch the state in the SSR phase of the rendering.
+- let's take a look at the example of how we can use it in the `pages/index.tsx` file:
+
+```tsx
+import type { GetServerSideProps, NextPage } from "next"
+import type { Book } from "@/types"
+
+import BooksList from "@/components/books/BooksList"
+import { setBooks } from "@/lib/redux/slices/booksSlice"
+import { wrapper } from "@/lib/redux/store/wrapper"
+import { getAllBooks } from "@/lib/db/books"
+
+interface PageProps {
+  [x: string]: unknown
+}
+
+const HomePage: NextPage<PageProps> = () => {
+  return (
+    <>
+      <BooksList />
+    </>
+  )
+}
+
+export const getServerSideProps: GetServerSideProps<PageProps> =
+  wrapper.getServerSideProps((store) => async () => {
+    let books: Book[] | null = null
+    try {
+      books = await getAllBooks()
+    } catch (error) {
+      books = null
+    }
+    books && store.dispatch(setBooks(books))
+
+    return { props: {} }
+  })
+```
+
+- what has just happened here is that we have used the `getServerSideProps` function to prefetch the state in the SSR phase of the rendering.
+- we have used the `wrapper.getServerSideProps` function to wrap our `getServerSideProps` function.
+- this function will automatically dispatch the `HYDRATE` action with the state of the store.
+- we have fetched the books from the database using the `getAllBooks` function and dispatched the `setBooks` action to set the books in the store.
+- this will merge the server state with the client state when the page is rendered on the client side.
+- this way, we can prefetch the state in the SSR phase of the rendering and use it in the client side.
+
+### Now the client side will have the pre-fetched state
+
+```tsx
+// @/components/books/BooksList
+import React, { useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
+
+import type { RootState, AppDispatch } from "@/lib/redux/store"
+
+const BooksList = (): JSX.Element => {
+  const books = useSelector((state: RootState) => state.books)
+
+  // ... other code
+
+  // As a fallback option: we could fetch books from the API if they are not already pre-fetched in the store.
+}
+```
+
+## See in the applications
+
+- you can see the full example of how to use Redux with Next.js SSR prefetch state in the
+  <a
+    href="https://my-reading-clubb.vercel.app/"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    📙 My reading club{" "}
+  </a>
+- Note: alternatively you can clone the [repository](https://github.com/SergeAtZeArtfinder/next-rtk-reading-club) and run it locally ( ask me for env vars )
+- what you can observe is that the books are pre-fetched in the SSR phase of the rendering and are available in the store on the client side with `0` loading time
+- You can observe it also in the devTools Redux tab: look for `"__NEXT_REDUX_WRAPPER_HYDRATE__"` action in the actions list to see when it is fired and with which payload
+- If production version: you can observe it in the network tab, where the request to the API is not made, as the data is already available in the store
+- You can check the Page Source and check the SSR rendered html - the books list will be already in.
+- You can also check the browser console for window value `__NEXT_DATA__.props.pageProps.initialState` to see the prefetched redux state

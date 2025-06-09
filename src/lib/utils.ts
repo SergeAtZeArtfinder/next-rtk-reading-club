@@ -12,8 +12,10 @@ export const paths = {
     asyncThunkState: () => "/about/async-thunk-state",
     asyncThunkCancel: () => "/about/async-thunk-cancel",
   },
-  addBook: () => "/book/create",
-  editBook: (bookId: string) => `/book/${bookId}`,
+  book: {
+    create: () => "/book/create",
+    edit: (bookId: string) => `/book/${bookId}/edit`,
+  },
   signin: () => "/signin",
   signup: () => "/signup",
 }

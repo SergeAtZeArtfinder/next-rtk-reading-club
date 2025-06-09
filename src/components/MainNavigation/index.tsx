@@ -37,7 +37,7 @@ const MainNavigation = (): JSX.Element => {
       >
         {isLoggedIn && (
           <NavbarItem aria-label="Add new Book page link">
-            <Link href={paths.addBook()}>add book</Link>
+            <Link href={paths.book.create()}>add book</Link>
           </NavbarItem>
         )}
         <NavbarItem isActive aria-label="About Redux RTK page link">

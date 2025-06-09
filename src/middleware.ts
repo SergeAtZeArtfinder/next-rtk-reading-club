@@ -4,7 +4,7 @@ import { withAuth } from "next-auth/middleware"
 import { paths } from "@/lib/utils"
 
 const AUTH_ROUTES = [paths.signin(), paths.signup()]
-const USER_ROUTES = [paths.addBook()]
+const USER_ROUTES = [paths.book.create(), paths.book.edit(":bookId")]
 
 export default withAuth(
   function middleware(req) {

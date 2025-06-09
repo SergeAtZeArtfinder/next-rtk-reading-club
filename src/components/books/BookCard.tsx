@@ -83,7 +83,7 @@ const BookCard = ({ book }: Props): JSX.Element => {
           <div className="absolute top-4 right-4 z-20 flex gap-2">
             <Button
               as={Link}
-              href={paths.editBook(book.id)}
+              href={paths.book.edit(book.id)}
               startContent={<FaEdit size={24} />}
               size="sm"
               color="warning"

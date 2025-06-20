@@ -29,6 +29,12 @@ export type CloudinaryImage = {
   height: number
 }
 
+export type ArtworksQueryParams = {
+  page?: number
+  limit?: number
+  search?: string
+}
+
 export type ArtworkSummary = {
   id: number
   title: string

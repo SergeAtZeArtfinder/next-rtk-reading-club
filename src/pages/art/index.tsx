@@ -1,0 +1,86 @@
+import React from "react"
+import type { NextPage, GetServerSideProps } from "next"
+import Head from "next/head"
+import { z } from "zod"
+
+import type { ArtworksQueryParams, ArtsApiSearchResponse } from "@/types"
+
+import { getArtEndpointUrl, formatArtworksList } from "@/lib/art"
+import { setArtworks } from "@/lib/redux/slices/artworksSlice"
+import { wrapper } from "@/lib/redux/store"
+
+const fetchArtworksSSR = async (
+  params: ArtworksQueryParams,
+): Promise<Pick<ArtsApiSearchResponse, "pagination" | "data"> | null> => {
+  try {
+    const { page, limit = 12, search } = params
+    const url = getArtEndpointUrl({ page, limit, search })
+
+    const res = await fetch(url)
+    const responseData = await res.json()
+    if (!res.ok) {
+      throw new Error(responseData.error || "Failed to fetch artworks")
+    }
+    const { pagination, data } = responseData as ArtsApiSearchResponse
+
+    return {
+      pagination,
+      data: formatArtworksList(data),
+    }
+  } catch (error) {
+    return null
+  }
+}
+
+const queryParamsSchema = z.object({
+  page: z.string().optional(),
+  limit: z.string().optional(),
+  search: z.string().optional(),
+})
+
+interface PageProps {}
+
+const ArtworksPage: NextPage<PageProps> = ({}) => {
+  return (
+    <>
+      <Head>
+        <title>Page</title>
+        <meta name="description" content="Next page" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <main>
+        <h1>Artworks Page</h1>
+      </main>
+    </>
+  )
+}
+
+export const getServerSideProps: GetServerSideProps<PageProps> =
+  wrapper.getServerSideProps((store) => async ({ res, query }) => {
+    const queryParams = queryParamsSchema.safeParse(query)
+
+    if (!queryParams.success) {
+      return {
+        props: {},
+      }
+    }
+
+    const { page, limit, search } = queryParams.data
+
+    const artworks = await fetchArtworksSSR({
+      page: page ? parseInt(page, 10) : undefined,
+      limit: limit ? parseInt(limit, 10) : undefined,
+      search: search || undefined,
+    })
+
+    if (artworks) {
+      store.dispatch(setArtworks(artworks))
+    }
+
+    return {
+      props: {},
+    }
+  })
+
+export default ArtworksPage

@@ -3,7 +3,7 @@ import { HYDRATE } from "next-redux-wrapper"
 
 import type { ArtsApiSearchResponse, ArtworksQueryParams } from "@/types"
 
-import { getArtEndpointUrl, getArtImageUrl } from "@/lib/art"
+import { getArtEndpointUrl, formatArtworksList } from "@/lib/art"
 
 interface ArtworksState {
   data: Pick<ArtsApiSearchResponse, "pagination" | "data"> | null
@@ -22,11 +22,15 @@ export const fetchArtworks = createAsyncThunk<
   ArtworksQueryParams, // Argument type
   { rejectValue: string } // Rejection type
 >("artworks/fetchArtworks", async (params, thunkApi) => {
-  const { page, limit = 12, search } = params
-  const url = getArtEndpointUrl({ page, limit, search })
+  const { page, limit, search } = params
+  const url = getArtEndpointUrl({
+    page,
+    limit,
+    search: search ? encodeURIComponent(search) : undefined,
+  })
   const res = await fetch(url)
   const responseData = await res.json()
-  if (!res.ok || !responseData.success) {
+  if (!res.ok) {
     return thunkApi.rejectWithValue(
       responseData.error || "Failed to fetch artworks",
     )
@@ -35,10 +39,7 @@ export const fetchArtworks = createAsyncThunk<
 
   return {
     pagination,
-    data: data.map((artwork) => ({
-      ...artwork,
-      image_url: artwork.image_id ? getArtImageUrl(artwork.image_id) : null,
-    })),
+    data: formatArtworksList(data),
   }
 })
 
@@ -85,3 +86,6 @@ export const artworksSlice = createSlice({
       })
   },
 })
+
+export const { setArtworks, setArtworksLoading, setArtworksError } =
+  artworksSlice.actions

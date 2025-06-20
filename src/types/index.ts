@@ -44,6 +44,7 @@ export type ArtworkSummary = {
   artist_display: string
   short_description: null
   image_id: string
+  image_url?: string | null
 }
 
 export type ArtworksPagination = {

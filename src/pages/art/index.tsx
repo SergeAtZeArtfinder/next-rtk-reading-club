@@ -5,7 +5,7 @@ import { z } from "zod"
 import type { NextPage, GetServerSideProps } from "next"
 import type { ArtworksQueryParams, ArtsApiSearchResponse } from "@/types"
 
-import { getArtEndpointUrl, formatArtworksList } from "@/lib/art"
+import { getArtsListEndpointUrl, formatArtworksList } from "@/lib/art"
 import { setArtworks, setArtworksError } from "@/lib/redux/slices/artworksSlice"
 import { wrapper } from "@/lib/redux/store"
 import ArtworksList from "@/components/artworks/ArtworksList"
@@ -15,7 +15,7 @@ const fetchArtworksSSR = async (
 ): Promise<Pick<ArtsApiSearchResponse, "pagination" | "data"> | null> => {
   try {
     const { page, limit = 12, search } = params
-    const url = getArtEndpointUrl({ page, limit, search })
+    const url = getArtsListEndpointUrl({ page, limit, search })
 
     const res = await fetch(url)
     const responseData = await res.json()

@@ -22,32 +22,32 @@ export interface NextApiSuccessResponse<T> {
   data: T
 }
 
-export type CloudinaryImage = {
+export interface CloudinaryImage {
   publicId: string
   url: string
   width: number
   height: number
 }
 
-export type ArtworksQueryParams = {
+export interface ArtworksQueryParams {
   page?: number
   limit?: number
   search?: string
 }
 
-export type ArtworkSummary = {
+export interface ArtworkSummary {
   id: number
   title: string
   classification_title: string
   main_reference_number: string
   date_display: string
   artist_display: string
-  short_description: null
+  short_description: string | null
   image_id: string
   image_url?: string | null
 }
 
-export type ArtworksPagination = {
+export interface ArtworksPagination {
   total: number
   limit: number
   offset: number
@@ -58,9 +58,38 @@ export type ArtworksPagination = {
   next_url?: string
 }
 
-export type ArtsApiSearchResponse = {
+export interface ArtsApiSearchResponse {
   pagination: ArtworksPagination
   data: ArtworkSummary[]
+  info: Record<string, any>
+  config: Record<string, any>
+}
+
+export interface ArtworkDetails {
+  id: number
+  title: string
+  alt_titles: string[] | null
+  artist_display: string
+  date_display: string // year
+  place_of_origin: string | null
+  description: string | null
+  short_description: string | null
+  dimensions: string | null
+  medium_display: string | null
+  publication_history: string | null
+  exhibition_history: string | null
+  provenance_text: string | null
+  copyright_notice: string | null
+  artwork_type_title: string | null
+  image_id: string
+  alt_image_ids: string[] | null
+  source_updated_at: string | null
+  classification_titles: string[] | null
+  classification_title: string | null
+}
+
+export interface ArtworkDetailsApiResponse {
+  data: ArtworkDetails
   info: Record<string, any>
   config: Record<string, any>
 }

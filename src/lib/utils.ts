@@ -18,6 +18,7 @@ export const paths = {
   },
   signin: () => "/signin",
   signup: () => "/signup",
+  art: () => "/art",
 }
 
 export const formatErrorMessage = (

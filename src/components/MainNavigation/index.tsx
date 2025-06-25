@@ -43,6 +43,10 @@ const MainNavigation = (): JSX.Element => {
         <NavbarItem isActive aria-label="About Redux RTK page link">
           <Link href={paths.about.index()}>about</Link>
         </NavbarItem>
+
+        <NavbarItem aria-label="View Artworks">
+          <Link href={paths.art()}>artworks</Link>
+        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent justify="end" aria-label="Main navigation user actions">

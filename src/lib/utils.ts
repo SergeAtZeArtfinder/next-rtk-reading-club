@@ -18,7 +18,8 @@ export const paths = {
   },
   signin: () => "/signin",
   signup: () => "/signup",
-  art: () => "/art",
+  art: (artworkId?: number) =>
+    typeof artworkId !== "undefined" ? `/art/${artworkId}` : "/art",
 }
 
 export const formatErrorMessage = (

@@ -50,10 +50,10 @@ const ArtworksPage: NextPage<PageProps> = ({}) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <>
         <h1 className=" text-3xl my-8 text-center">Artworks</h1>
         <ArtworksList />
-      </main>
+      </>
     </>
   )
 }

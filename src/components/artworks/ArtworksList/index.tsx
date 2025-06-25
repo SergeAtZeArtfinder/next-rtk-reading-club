@@ -3,13 +3,12 @@ import { useSelector, useDispatch } from "react-redux"
 import { Pagination, Button, addToast } from "@heroui/react"
 import { useRouter } from "next/router"
 
+import type { ParsedUrlQuery } from "querystring"
 import type { RootState, AppDispatch } from "@/lib/redux/store"
 
 import { fetchArtworks } from "@/lib/redux/slices/artworksSlice"
 import ArtworkCard from "../ArtworkCard"
 import ArtworksListSkeleton from "./Skeleton"
-import { ParsedUrlQuery } from "querystring"
-import { ad } from "vitest/dist/chunks/reporters.d.DL9pg5DB.js"
 
 const useScrollToTop = () => {
   const [showScrollTop, setShowScrollTop] = useState(false)
@@ -38,8 +37,8 @@ const getPaginationInfo = ({
     currentPaginationPage: artworks.data?.pagination.current_page || 1,
     currentPaginationLimit: artworks.data?.pagination.limit || 12,
     currentPaginationSearchTerm: artworks.data?.pagination.search || null,
-    currentRouterPage: parseInt(page as string, 10) || 1,
-    currentRouterLimit: parseInt(limit as string, 10) || 12,
+    currentRouterPage: parseInt(page as string, 10),
+    currentRouterLimit: parseInt(limit as string, 10),
     currentRouterSearchTerm: search ? (search as string) : null,
   }
 }
@@ -48,7 +47,7 @@ const ArtworksList = (): JSX.Element => {
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
   const artworks = useSelector((state: RootState) => state.artworks)
-  const showScrollTop = useScrollToTop()
+  const isScrollTopButton = useScrollToTop()
 
   const {
     currentPaginationTotalPages,
@@ -64,7 +63,7 @@ const ArtworksList = (): JSX.Element => {
     const query = { ...router.query }
 
     if (page > 0) {
-      query.page = String(page)
+      query.page = `${page}`
     } else {
       delete query.page
     }
@@ -147,10 +146,9 @@ const ArtworksList = (): JSX.Element => {
         </div>
       )}
 
-      {/* 3. Scroll to top button */}
-      {showScrollTop && (
+      {isScrollTopButton && (
         <Button
-          onClick={handleScrollToTop}
+          onPress={handleScrollToTop}
           className="fixed bottom-6 right-6 z-50 rounded-full shadow-lg hover:border-yellow-800 hover:text-yellow-800 active:border-yellow-900 transition-opacity duration-300"
           color="warning"
           variant="bordered"

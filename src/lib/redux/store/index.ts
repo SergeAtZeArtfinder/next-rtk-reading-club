@@ -2,7 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit"
 import { createWrapper } from "next-redux-wrapper"
 import { exampleSlice } from "../slices/exampleSlice"
 import { booksSlice } from "../slices/booksSlice"
-import { artworksSlice } from "../slices/artworksSlice" // Import artworksSlice if needed;
+import { artworksSlice } from "../slices/artworksSlice"
 
 /**
  * Combine reducers

@@ -1,13 +1,14 @@
 import React from "react"
-import type { NextPage, GetServerSideProps } from "next"
 import Head from "next/head"
 import { z } from "zod"
 
+import type { NextPage, GetServerSideProps } from "next"
 import type { ArtworksQueryParams, ArtsApiSearchResponse } from "@/types"
 
 import { getArtEndpointUrl, formatArtworksList } from "@/lib/art"
 import { setArtworks } from "@/lib/redux/slices/artworksSlice"
 import { wrapper } from "@/lib/redux/store"
+import ArtworksList from "@/components/artworks/ArtworksList"
 
 const fetchArtworksSSR = async (
   params: ArtworksQueryParams,
@@ -50,7 +51,8 @@ const ArtworksPage: NextPage<PageProps> = ({}) => {
       </Head>
 
       <main>
-        <h1>Artworks Page</h1>
+        <h1 className=" text-3xl my-8 text-center">Artworks</h1>
+        <ArtworksList />
       </main>
     </>
   )

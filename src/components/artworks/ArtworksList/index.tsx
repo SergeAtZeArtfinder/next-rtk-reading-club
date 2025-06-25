@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { Pagination, Button } from "@heroui/react"
+import { Pagination, Button, addToast } from "@heroui/react"
 import { useRouter } from "next/router"
 
 import type { RootState, AppDispatch } from "@/lib/redux/store"
-import type { ArtworkSummary } from "@/types"
 
 import { fetchArtworks } from "@/lib/redux/slices/artworksSlice"
 import ArtworkCard from "../ArtworkCard"
 import ArtworksListSkeleton from "./Skeleton"
+import { ParsedUrlQuery } from "querystring"
+import { ad } from "vitest/dist/chunks/reporters.d.DL9pg5DB.js"
 
 const useScrollToTop = () => {
   const [showScrollTop, setShowScrollTop] = useState(false)
 
-  // 2. Effect to listen for scroll events
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 400)
@@ -25,21 +25,40 @@ const useScrollToTop = () => {
   return showScrollTop
 }
 
+const getPaginationInfo = ({
+  artworks,
+  query,
+}: {
+  artworks: RootState["artworks"]
+  query: ParsedUrlQuery
+}) => {
+  const { page = "1", limit = "12", search } = query
+  return {
+    currentPaginationTotalPages: artworks.data?.pagination.total_pages || 10,
+    currentPaginationPage: artworks.data?.pagination.current_page || 1,
+    currentPaginationLimit: artworks.data?.pagination.limit || 12,
+    currentPaginationSearchTerm: artworks.data?.pagination.search || null,
+    currentRouterPage: parseInt(page as string, 10) || 1,
+    currentRouterLimit: parseInt(limit as string, 10) || 12,
+    currentRouterSearchTerm: search ? (search as string) : null,
+  }
+}
+
 const ArtworksList = (): JSX.Element => {
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
   const artworks = useSelector((state: RootState) => state.artworks)
   const showScrollTop = useScrollToTop()
 
-  const currentPaginationTotalPages =
-    artworks.data?.pagination.total_pages || 10
-  const { page = "1", limit = "12", search } = router.query
-  const currentPaginationPage = artworks.data?.pagination.current_page || 1
-  const currentPaginationLimit = artworks.data?.pagination.limit || 12
-  const currentPaginationSearchTerm = artworks.data?.pagination.search || null
-  const currentRouterPage = parseInt(page as string, 10) || 1
-  const currentRouterLimit = parseInt(limit as string, 10) || 12
-  const currentRouterSearchTerm = search ? (search as string) : null
+  const {
+    currentPaginationTotalPages,
+    currentPaginationPage,
+    currentPaginationLimit,
+    currentPaginationSearchTerm,
+    currentRouterPage,
+    currentRouterLimit,
+    currentRouterSearchTerm,
+  } = getPaginationInfo({ artworks, query: router.query })
 
   const handlePaginateRouter = (page: number) => {
     const query = { ...router.query }
@@ -89,6 +108,15 @@ const ArtworksList = (): JSX.Element => {
     dispatch,
   ])
 
+  useEffect(() => {
+    if (!artworks.error) return
+
+    addToast({
+      title: artworks.error,
+      color: "danger",
+    })
+  }, [artworks.error])
+
   return (
     <div>
       {artworks.loading && <ArtworksListSkeleton items={12} />}
@@ -107,15 +135,17 @@ const ArtworksList = (): JSX.Element => {
         ))}
       </ul>
 
-      <div className="mt-8 py-4 flex justify-center">
-        <Pagination
-          initialPage={1}
-          total={currentPaginationTotalPages}
-          page={currentRouterPage}
-          onChange={handlePaginateRouter}
-          color="warning"
-        />
-      </div>
+      {artworks.data && artworks.data.pagination.total_pages > 1 && (
+        <div className="mt-8 py-4 flex justify-center">
+          <Pagination
+            initialPage={1}
+            total={currentPaginationTotalPages}
+            page={currentRouterPage}
+            onChange={handlePaginateRouter}
+            color="warning"
+          />
+        </div>
+      )}
 
       {/* 3. Scroll to top button */}
       {showScrollTop && (

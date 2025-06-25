@@ -6,7 +6,7 @@ import type { NextPage, GetServerSideProps } from "next"
 import type { ArtworksQueryParams, ArtsApiSearchResponse } from "@/types"
 
 import { getArtEndpointUrl, formatArtworksList } from "@/lib/art"
-import { setArtworks } from "@/lib/redux/slices/artworksSlice"
+import { setArtworks, setArtworksError } from "@/lib/redux/slices/artworksSlice"
 import { wrapper } from "@/lib/redux/store"
 import ArtworksList from "@/components/artworks/ArtworksList"
 
@@ -45,8 +45,8 @@ const ArtworksPage: NextPage<PageProps> = ({}) => {
   return (
     <>
       <Head>
-        <title>Page</title>
-        <meta name="description" content="Next page" />
+        <title>Artworks</title>
+        <meta name="description" content="Artworks page" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -78,6 +78,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> =
 
     if (artworks) {
       store.dispatch(setArtworks(artworks))
+    } else {
+      store.dispatch(setArtworksError("Failed to fetch artworks on server"))
     }
 
     return {

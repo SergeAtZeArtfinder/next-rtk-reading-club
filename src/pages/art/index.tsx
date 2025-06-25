@@ -25,7 +25,7 @@ const fetchArtworksSSR = async (
     const { pagination, data } = responseData as ArtsApiSearchResponse
 
     return {
-      pagination,
+      pagination: { ...pagination, search: search || null },
       data: formatArtworksList(data),
     }
   } catch (error) {

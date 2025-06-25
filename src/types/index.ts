@@ -53,6 +53,7 @@ export type ArtworksPagination = {
   offset: number
   total_pages: number
   current_page: number
+  search?: string | null
   prev_url?: string
   next_url?: string
 }

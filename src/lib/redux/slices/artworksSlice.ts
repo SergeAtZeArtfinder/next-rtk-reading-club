@@ -3,7 +3,7 @@ import { HYDRATE } from "next-redux-wrapper"
 
 import type { ArtsApiSearchResponse, ArtworksQueryParams } from "@/types"
 
-import { getArtEndpointUrl, formatArtworksList } from "@/lib/art"
+import { getArtsListEndpointUrl, formatArtworksList } from "@/lib/art"
 
 interface ArtworksState {
   data: Pick<ArtsApiSearchResponse, "pagination" | "data"> | null
@@ -23,7 +23,7 @@ export const fetchArtworks = createAsyncThunk<
   { rejectValue: string } // Rejection type
 >("artworks/fetchArtworks", async (params, thunkApi) => {
   const { page, limit, search } = params
-  const url = getArtEndpointUrl({
+  const url = getArtsListEndpointUrl({
     page,
     limit,
     search: search ? encodeURIComponent(search) : undefined,

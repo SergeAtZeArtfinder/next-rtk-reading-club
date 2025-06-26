@@ -11,6 +11,7 @@ const artworkDetailsFields = [
   "title",
   "alt_titles",
   "artist_display",
+  "artist_title",
   "date_display",
   "place_of_origin",
   "description",
@@ -72,8 +73,10 @@ export const formatArtworkDetails = ({
 }: ArtworkDetails): ArtworkDetails => {
   return {
     ...rest,
-    image_id: getArtImageUrl(image_id),
-    alt_image_ids: alt_image_ids
+    image_id,
+    alt_image_ids,
+    image_url: getArtImageUrl(image_id),
+    alt_image_urls: alt_image_ids
       ? alt_image_ids?.map((id) => getArtImageUrl(id))
       : null,
   }

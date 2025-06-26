@@ -70,6 +70,7 @@ export interface ArtworkDetails {
   title: string
   alt_titles: string[] | null
   artist_display: string
+  artist_title: string | null
   date_display: string // year
   place_of_origin: string | null
   description: string | null
@@ -82,7 +83,9 @@ export interface ArtworkDetails {
   copyright_notice: string | null
   artwork_type_title: string | null
   image_id: string
+  image_url: string
   alt_image_ids: string[] | null
+  alt_image_urls: string[] | null
   source_updated_at: string | null
   classification_titles: string[] | null
   classification_title: string | null

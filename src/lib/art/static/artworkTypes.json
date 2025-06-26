@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "title": "Painting",
+    "aat_id": 300033618
+  },
+  {
+    "id": 23,
+    "title": "Vessel",
+    "aat_id": 300193015
+  },
+  {
+    "id": 22,
+    "title": "Basketry",
+    "aat_id": 300404578
+  },
+  {
+    "id": 21,
+    "title": "Miniature room",
+    "aat_id": 300427608
+  },
+  {
+    "id": 20,
+    "title": "Model",
+    "aat_id": 300047753
+  },
+  {
+    "id": 19,
+    "title": "Architectural fragment",
+    "aat_id": 300190691
+  },
+  {
+    "id": 18,
+    "title": "Print",
+    "aat_id": 300041273
+  },
+  {
+    "id": 17,
+    "title": "Performance Arts",
+    "aat_id": 300121445
+  },
+  {
+    "id": 16,
+    "title": "Installation",
+    "aat_id": 300047896
+  },
+  {
+    "id": 15,
+    "title": "Mixed Media",
+    "aat_id": 300404586
+  },
+  {
+    "id": 14,
+    "title": "Drawing and Watercolor",
+    "aat_id": 300033973
+  },
+  {
+    "id": 12,
+    "title": "Costume and Accessories",
+    "aat_id": 300209261
+  },
+  {
+    "id": 11,
+    "title": "Book",
+    "aat_id": 300028051
+  },
+  {
+    "id": 10,
+    "title": "Audio-Video",
+    "aat_id": 300102067
+  },
+  {
+    "id": 48,
+    "title": "Time Based Media",
+    "aat_id": 300185191
+  },
+  {
+    "id": 47,
+    "title": "Materials",
+    "aat_id": 300010357
+  },
+  {
+    "id": 46,
+    "title": "Equipment",
+    "aat_id": 300122241
+  },
+  {
+    "id": 45,
+    "title": "Archives (groupings)",
+    "aat_id": 300375748
+  },
+  {
+    "id": 44,
+    "title": "Medals",
+    "aat_id": 300391159
+  },
+  {
+    "id": 42,
+    "title": "Furnishings",
+    "aat_id": 300037335
+  },
+  {
+    "id": 40,
+    "title": "Prototypes",
+    "aat_id": 300166391
+  },
+  {
+    "id": 38,
+    "title": "Coverings and Hangings",
+    "aat_id": 300435669
+  },
+  {
+    "id": 37,
+    "title": "Glass",
+    "aat_id": 300386226
+  },
+  {
+    "id": 36,
+    "title": "Ceramics",
+    "aat_id": 300386308
+  },
+  {
+    "id": 35,
+    "title": "Metalwork",
+    "aat_id": 300411548
+  },
+  {
+    "id": 34,
+    "title": "Architectural Drawing",
+    "aat_id": 300054197
+  },
+  {
+    "id": 33,
+    "title": "Film, Video, New Media",
+    "aat_id": 300386815
+  },
+  {
+    "id": 32,
+    "title": "Graphic Design",
+    "aat_id": 300054181
+  },
+  {
+    "id": 31,
+    "title": "Design",
+    "aat_id": 300054171
+  },
+  {
+    "id": 30,
+    "title": "Miniature Painting",
+    "aat_id": 300427607
+  },
+  {
+    "id": 29,
+    "title": "Armor",
+    "aat_id": 300209266
+  },
+  {
+    "id": 28,
+    "title": "Arms",
+    "aat_id": 300036926
+  },
+  {
+    "id": 27,
+    "title": "Funerary Object",
+    "aat_id": 300234126
+  },
+  {
+    "id": 26,
+    "title": "Coin",
+    "aat_id": 300037334
+  },
+  {
+    "id": 24,
+    "title": "Religious/Ritual Object",
+    "aat_id": 300312158
+  },
+  {
+    "id": 13,
+    "title": "Digital Arts",
+    "aat_id": 300386810
+  },
+  {
+    "id": 8,
+    "title": "Decorative Arts",
+    "aat_id": 300411641
+  },
+  {
+    "id": 7,
+    "title": "Mask",
+    "aat_id": 300138758
+  },
+  {
+    "id": 6,
+    "title": "Furniture",
+    "aat_id": 300037336
+  },
+  {
+    "id": 5,
+    "title": "Textile",
+    "aat_id": 300014063
+  },
+  {
+    "id": 4,
+    "title": "Icon",
+    "aat_id": 300266210
+  },
+  {
+    "id": 3,
+    "title": "Sculpture",
+    "aat_id": 300301253
+  },
+  {
+    "id": 2,
+    "title": "Photograph",
+    "aat_id": 300046300
+  },
+  {
+    "id": 43,
+    "title": "non-art",
+    "aat_id": null
+  }
+]

@@ -122,6 +122,13 @@ const ArtworksList = (): JSX.Element => {
         className="w-full grid gap-2 grid-cols-gallery "
         aria-label="Artworks list"
       >
+        {artworks.data?.data.length === 0 &&
+          !artworks.loading &&
+          artworks.error === null && (
+            <li className="col-span-full ">
+              <p className="text-center text-gray-500"> No artworks found.</p>
+            </li>
+          )}
         {artworks.data?.data.map((artwork) => (
           <li
             key={artwork.id}

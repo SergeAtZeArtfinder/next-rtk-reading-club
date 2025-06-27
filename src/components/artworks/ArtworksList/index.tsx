@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Pagination, Button, addToast } from "@heroui/react"
 import { useRouter } from "next/router"
@@ -11,20 +11,7 @@ import type { RootState, AppDispatch } from "@/lib/redux/store"
 import { fetchArtworks } from "@/lib/redux/slices/artworksSlice"
 import ArtworkCard from "../ArtworkCard"
 import ArtworksListSkeleton from "./Skeleton"
-
-const useScrollToTop = () => {
-  const [showScrollTop, setShowScrollTop] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 400)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  return showScrollTop
-}
+import { useScrollToTop } from "./useScrollToTop"
 
 const getPaginationInfo = ({
   artworks,
@@ -33,15 +20,18 @@ const getPaginationInfo = ({
   artworks: RootState["artworks"]
   query: ParsedUrlQuery
 }) => {
-  const { page = "1", limit = "12", search } = query
+  const { page = "1", limit = "12", search, artworkType } = query
+
   return {
     currentPaginationTotalPages: artworks.data?.pagination.total_pages || 10,
     currentPaginationPage: artworks.data?.pagination.current_page || 1,
     currentPaginationLimit: artworks.data?.pagination.limit || 12,
     currentPaginationSearchTerm: artworks.data?.pagination.search || null,
+    currentPaginationArtworkType: artworks.data?.pagination.artworkType || null,
     currentRouterPage: parseInt(page as string, 10),
     currentRouterLimit: parseInt(limit as string, 10),
     currentRouterSearchTerm: search ? (search as string) : null,
+    currentRouterArtworkType: artworkType ? (artworkType as string) : null,
   }
 }
 
@@ -59,6 +49,8 @@ const ArtworksList = (): JSX.Element => {
     currentRouterPage,
     currentRouterLimit,
     currentRouterSearchTerm,
+    currentRouterArtworkType,
+    currentPaginationArtworkType,
   } = getPaginationInfo({ artworks, query: router.query })
 
   const handlePaginateRouter = (page: number) => {
@@ -88,7 +80,8 @@ const ArtworksList = (): JSX.Element => {
     const hasPaginationChanged =
       currentPaginationPage !== currentRouterPage ||
       currentPaginationLimit !== currentRouterLimit ||
-      currentPaginationSearchTerm !== currentRouterSearchTerm
+      currentPaginationSearchTerm !== currentRouterSearchTerm ||
+      currentPaginationArtworkType !== currentRouterArtworkType
 
     if (!hasPaginationChanged) return
 
@@ -97,6 +90,7 @@ const ArtworksList = (): JSX.Element => {
         page: currentRouterPage,
         limit: currentRouterLimit,
         search: currentRouterSearchTerm || undefined,
+        artworkType: currentRouterArtworkType || undefined,
       }),
     )
   }, [
@@ -106,6 +100,8 @@ const ArtworksList = (): JSX.Element => {
     currentRouterLimit,
     currentPaginationSearchTerm,
     currentRouterSearchTerm,
+    currentRouterArtworkType,
+    currentPaginationArtworkType,
     dispatch,
   ])
 
@@ -121,10 +117,18 @@ const ArtworksList = (): JSX.Element => {
   return (
     <div>
       {artworks.loading && <ArtworksListSkeleton items={12} />}
+
       <ul
         className="w-full grid gap-2 grid-cols-gallery "
         aria-label="Artworks list"
       >
+        {artworks.data?.data.length === 0 &&
+          !artworks.loading &&
+          artworks.error === null && (
+            <li className="col-span-full ">
+              <p className="text-center text-gray-500"> No artworks found.</p>
+            </li>
+          )}
         {artworks.data?.data.map((artwork) => (
           <li
             key={artwork.id}

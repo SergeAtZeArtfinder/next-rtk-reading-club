@@ -22,11 +22,12 @@ export const fetchArtworks = createAsyncThunk<
   ArtworksQueryParams, // Argument type
   { rejectValue: string } // Rejection type
 >("artworks/fetchArtworks", async (params, thunkApi) => {
-  const { page, limit, search } = params
+  const { page, limit, search, artworkType } = params
   const url = getArtsListEndpointUrl({
     page,
     limit,
     search: search ? encodeURIComponent(search) : undefined,
+    artworkType,
   })
   const res = await fetch(url)
   const responseData = await res.json()
@@ -38,7 +39,11 @@ export const fetchArtworks = createAsyncThunk<
   const { pagination, data } = responseData as ArtsApiSearchResponse
 
   return {
-    pagination,
+    pagination: {
+      ...pagination,
+      search: search || null,
+      artworkType: artworkType || null,
+    },
     data: formatArtworksList(data),
   }
 })

@@ -29,10 +29,17 @@ export interface CloudinaryImage {
   height: number
 }
 
+export interface ArtworkType {
+  id: number
+  title: string
+  aat_id: string | null
+}
+
 export interface ArtworksQueryParams {
   page?: number
   limit?: number
   search?: string
+  artworkType?: string
 }
 
 export interface ArtworkSummary {
@@ -54,16 +61,20 @@ export interface ArtworksPagination {
   total_pages: number
   current_page: number
   search?: string | null
+  artworkType?: string | null
   prev_url?: string
   next_url?: string
 }
 
-export interface ArtsApiSearchResponse {
+export interface ArtsApiListResponse<D> {
   pagination: ArtworksPagination
-  data: ArtworkSummary[]
+  data: D[]
   info: Record<string, any>
   config: Record<string, any>
 }
+
+export type ArtsApiSearchResponse = ArtsApiListResponse<ArtworkSummary>
+export type ArtworkTypesApiResponse = ArtsApiListResponse<ArtworkType>
 
 export interface ArtworkDetails {
   id: number
@@ -89,6 +100,7 @@ export interface ArtworkDetails {
   source_updated_at: string | null
   classification_titles: string[] | null
   classification_title: string | null
+  artwork_type_id: number
 }
 
 export interface ArtworkDetailsApiResponse {

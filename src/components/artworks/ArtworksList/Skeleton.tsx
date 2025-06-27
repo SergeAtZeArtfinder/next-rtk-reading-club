@@ -16,13 +16,13 @@ const ArtworksListSkeleton = ({ items = 6, className }: Props): JSX.Element => {
           className="rounded-xl"
           aria-label={`Loading artwork item ${index + 1}`}
         >
-          <CardBody className="grid grid-cols-1 gap-2">
+          <CardBody className="grid grid-cols-1 gap-4">
             <div className="w-full h-64 rounded-xl overflow-hidden">
               <Skeleton className="w-full h-full" />
             </div>
 
-            <Skeleton className="w-32 h-8 rounded-lg" />
-            <Skeleton className="w-[80%] h-6 rounded-lg" />
+            <Skeleton className="w-[75%] h-10 rounded-lg" />
+            <Skeleton className="w-[80%] h-12 rounded-lg" />
             <Skeleton className="w-[90%] h-6 rounded-lg" />
             <Skeleton className="w-full h-6 rounded-lg" />
           </CardBody>

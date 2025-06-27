@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Pagination, Button, addToast } from "@heroui/react"
 import { useRouter } from "next/router"
@@ -11,20 +11,7 @@ import type { RootState, AppDispatch } from "@/lib/redux/store"
 import { fetchArtworks } from "@/lib/redux/slices/artworksSlice"
 import ArtworkCard from "../ArtworkCard"
 import ArtworksListSkeleton from "./Skeleton"
-
-const useScrollToTop = () => {
-  const [showScrollTop, setShowScrollTop] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 400)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  return showScrollTop
-}
+import { useScrollToTop } from "./useScrollToTop"
 
 const getPaginationInfo = ({
   artworks,

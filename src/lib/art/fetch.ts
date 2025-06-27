@@ -2,12 +2,16 @@ import type {
   ArtworkTypesApiResponse,
   ArtsApiSearchResponse,
   ArtworksQueryParams,
+  ArtworkDetails,
+  ArtworkDetailsApiResponse,
 } from "@/types"
 
 import {
   getArtworkTypesUrl,
   formatArtworksList,
   getArtsListEndpointUrl,
+  getArtworkDetailsEndpointUrl,
+  formatArtworkDetails,
 } from "./utils"
 import defaultArtworkTypes from "./static/artworkTypes.json"
 
@@ -50,6 +54,24 @@ export const fetchArtworksSSR = async (
       },
       data: formatArtworksList(data),
     }
+  } catch (error) {
+    return null
+  }
+}
+
+export const fetchArtworkByIdSSR = async (
+  artworkId: string,
+): Promise<ArtworkDetails | null> => {
+  try {
+    const url = getArtworkDetailsEndpointUrl(artworkId)
+    const res = await fetch(url)
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch artwork with ID: ${artworkId}`)
+    }
+
+    const responseData = (await res.json()) as ArtworkDetailsApiResponse
+    return formatArtworkDetails(responseData.data)
   } catch (error) {
     return null
   }

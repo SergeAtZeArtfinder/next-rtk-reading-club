@@ -100,6 +100,7 @@ export interface ArtworkDetails {
   source_updated_at: string | null
   classification_titles: string[] | null
   classification_title: string | null
+  artwork_type_id: number
 }
 
 export interface ArtworkDetailsApiResponse {

@@ -6,7 +6,7 @@ import type {
 
 const baseUrl = process.env.NEXT_PUBLIC_ART_BASE_URL
 const imageBaseUrl = process.env.NEXT_PUBLIC_ART_IMAGE_BASE_URL
-const artworkDetailsFields = [
+export const artworkDetailsFields = [
   "id",
   "title",
   "alt_titles",
@@ -30,7 +30,7 @@ const artworkDetailsFields = [
   "classification_titles",
   "classification_title",
 ]
-const artworkSummaryFields = [
+export const artworkSummaryFields = [
   "id",
   "title",
   "classification_title",

@@ -117,6 +117,7 @@ const ArtworksList = (): JSX.Element => {
   return (
     <div>
       {artworks.loading && <ArtworksListSkeleton items={12} />}
+
       <ul
         className="w-full grid gap-2 grid-cols-gallery "
         aria-label="Artworks list"

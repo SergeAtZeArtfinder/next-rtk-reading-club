@@ -1,14 +1,7 @@
 "use client"
 
 import React from "react"
-import {
-  Card,
-  CardBody,
-  Select,
-  SelectSection,
-  SelectItem,
-  Button,
-} from "@heroui/react"
+import { Card, CardBody, Select, SelectItem, Button } from "@heroui/react"
 import { useRouter } from "next/router"
 
 import type { ArtworkType } from "@/types"
@@ -25,10 +18,17 @@ const ArtworksFilter = ({ artworkTypes }: Props): JSX.Element => {
     const currentQuery = { ...router.query }
 
     if (!typeId) {
-      // If no type is selected, remove the filter from the query
+      /**
+       * If no type is selected, remove the filter from the query
+       */
       delete currentQuery["artworkType"]
     } else {
+      /**
+       * If a type is selected, add it to the query
+       * and remove the page parameter to reset pagination
+       */
       currentQuery["artworkType"] = typeId
+      delete currentQuery.page
     }
 
     router.push(

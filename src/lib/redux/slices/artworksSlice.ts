@@ -1,7 +1,13 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit"
+import {
+  createSlice,
+  PayloadAction,
+  createAsyncThunk,
+  createSelector,
+} from "@reduxjs/toolkit"
 import { HYDRATE } from "next-redux-wrapper"
 
 import type { ArtsApiSearchResponse, ArtworksQueryParams } from "@/types"
+import type { RootState } from "@/lib/redux/store"
 
 import { getArtsListEndpointUrl, formatArtworksList } from "@/lib/art"
 
@@ -94,3 +100,12 @@ export const artworksSlice = createSlice({
 
 export const { setArtworks, setArtworksLoading, setArtworksError } =
   artworksSlice.actions
+
+/**
+ * @description Memoized selector using createSelector
+ * @link https://redux-toolkit.js.org/api/createSelector
+ */
+export const artworksSelector = createSelector(
+  [(state: RootState) => state.artworks],
+  (artworks) => artworks,
+)

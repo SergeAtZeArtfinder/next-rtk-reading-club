@@ -3,14 +3,14 @@
 import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 
-import type { RootState, AppDispatch } from "@/lib/redux/store"
+import type { AppDispatch } from "@/lib/redux/store"
 
-import { fetchBooks } from "@/lib/redux/slices/booksSlice"
+import { fetchBooks, booksSelector } from "@/lib/redux/slices/booksSlice"
 import BookCard from "./BookCard"
 
 const BooksList = (): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>()
-  const books = useSelector((state: RootState) => state.books)
+  const books = useSelector(booksSelector)
   const shouldFetch = !books.data?.length
 
   /**

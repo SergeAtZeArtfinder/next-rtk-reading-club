@@ -11,6 +11,7 @@ export const paths = {
     ssrPrefetch: () => "/about/ssr-prefetch",
     asyncThunkState: () => "/about/async-thunk-state",
     asyncThunkCancel: () => "/about/async-thunk-cancel",
+    memoizedSelectors: () => "/about/state-memoized-selectors",
   },
   book: {
     create: () => "/book/create",

@@ -1,0 +1,75 @@
+# Redux (RTK) The Usefulness of Memoized Selectors in Redux with `createSelector` from Reselect
+Memoized selectors are a cornerstone of efficient Redux state management, especially in large or complex React applications. The `createSelector` function from the `reselect` library provides a powerful and simple way to create these selectors, ensuring that expensive computations are only performed when necessary.
+
+## What Are Memoized Selectors?
+
+A **selector** is a function that extracts or derives data from the Redux store state. A **memoized selector** remembers (caches) the result of its computation based on its inputs. If the inputs haven't changed, the selector returns the cached result instead of recalculating, which saves processing time and avoids unnecessary React re-renders.
+
+## Why Use `createSelector`?
+
+- **Performance**: Without memoization, selectors recompute their result every time they're called, even if the underlying state hasn't changed. `createSelector` solves this by only recalculating when its inputs actually change.
+- **Reference Equality**: Memoized selectors return the same reference for unchanged results, which is crucial for React-Redux's shallow equality checks and optimizing component updates.
+- **Composability**: You can build complex derived data by composing simple selectors together, making your state logic more maintainable.
+
+## Basic Usage
+
+Below is a simple example using `createSelector` to count completed todos in a Redux state:
+
+```tsx
+import { createSelector } from 'reselect';
+
+// Input selector: gets the todos array from state
+const selectTodos = state => state.todos;
+
+// Memoized selector: counts completed todos
+const selectCompletedTodosCount = createSelector(
+[selectTodos],
+todos => todos.filter(todo => todo.completed).length
+);
+
+// Usage in a React component
+import { useSelector } from 'react-redux';
+
+const CompletedTodosCounter = () => {
+// Using the memoized selector to get the count of completed todos
+// This will only recompute/re-render when the todos array length changes
+const completedCount = useSelector(selectCompletedTodosCount);
+
+return <div>Completed Todos: {completedCount}</div>;
+};
+```
+
+In this example ☝️, `selectCompletedTodosCount` only recalculates when `state.todos` changes. If the todos array remains the same, 
+repeated calls return the cached count, avoiding unnecessary computation and re-renders.
+
+## Composing Selectors
+
+Selectors can be composed for more complex data needs:
+
+```ts
+const selectFilter = state => state.filter;
+
+const selectFilteredTodos = createSelector(
+[selectTodos, selectFilter],
+(todos, filter) => todos.filter(todo => todo.type === filter)
+);
+
+const selectFilteredTodoNames = createSelector(
+[selectFilteredTodos],
+filteredTodos => filteredTodos.map(todo => todo.name)
+);
+```
+This pattern keeps logic modular and efficient, as each selector only recomputes when its specific inputs change.
+
+## Key Takeaways
+
+- **Memoized selectors** created with `createSelector` improve Redux app performance by avoiding redundant calculations.
+- They are **essential for optimizing UI updates** in React-Redux, thanks to reference equality.
+- **Composability** allows for clean, maintainable, and scalable state derivation logic.
+
+For any Redux application where derived data or performance is a concern, 
+memoized selectors with `createSelector` are a best practice.
+
+## Further Reading
+- [Redux Toolkit - createSelector](https://redux-toolkit.js.org/api/createSelector)
+- [Reselect Documentation](https://github.com/reduxjs/reselect)

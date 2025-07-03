@@ -8,7 +8,10 @@ import { useRouter } from "next/router"
 import type { ParsedUrlQuery } from "querystring"
 import type { RootState, AppDispatch } from "@/lib/redux/store"
 
-import { fetchArtworks } from "@/lib/redux/slices/artworksSlice"
+import {
+  fetchArtworks,
+  artworksSelector,
+} from "@/lib/redux/slices/artworksSlice"
 import ArtworkCard from "../ArtworkCard"
 import ArtworksListSkeleton from "./Skeleton"
 import { useScrollToTop } from "./useScrollToTop"
@@ -38,7 +41,7 @@ const getPaginationInfo = ({
 const ArtworksList = (): JSX.Element => {
   const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
-  const artworks = useSelector((state: RootState) => state.artworks)
+  const artworks = useSelector(artworksSelector)
   const isScrollTopButton = useScrollToTop()
 
   const {

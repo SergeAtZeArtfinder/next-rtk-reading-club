@@ -1,8 +1,15 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit"
+import {
+  createSlice,
+  PayloadAction,
+  createAsyncThunk,
+  createSelector,
+} from "@reduxjs/toolkit"
 import { HYDRATE } from "next-redux-wrapper"
 import { z } from "zod"
 
 import type { Book } from "@/types"
+import type { RootState } from "@/lib/redux/store"
+
 import { schemaCreateBook } from "@/lib/validation"
 
 interface BooksState {
@@ -194,9 +201,14 @@ export const booksSlice = createSlice({
   },
 })
 export const { setBooks, setLoading, setError } = booksSlice.actions
-export const selectBooks = (state: { books: BooksState }) => state.books.data
-export const selectLoading = (state: { books: BooksState }) =>
-  state.books.loading
-export const selectError = (state: { books: BooksState }) => state.books.error
+
+/**
+ * @description Memoized selector using createSelector
+ * @link https://redux-toolkit.js.org/api/createSelector
+ */
+export const booksSelector = createSelector(
+  [(state: RootState) => state.books],
+  (books) => books,
+)
 
 export default booksSlice.reducer

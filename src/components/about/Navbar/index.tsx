@@ -35,6 +35,11 @@ export const navLinks = [
     href: paths.about.asyncThunkCancel(),
     label: "Async Thunk Cancel",
   },
+  {
+    id: 6,
+    href: paths.about.memoizedSelectors(),
+    label: "Memoized Selectors",
+  },
 ]
 
 const Navbar = (): JSX.Element => {

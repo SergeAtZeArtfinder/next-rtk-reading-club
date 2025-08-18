@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "18.x"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "next dev",
@@ -17,11 +17,6 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:ci": "vitest --run --reporter=verbose",
-    "postinstall": "prisma generate",
-    "postbuild": "npx tsx src/lib/scripts/generate-sitemap.ts",
-    "db-migrate": "npx prisma migrate dev",
-    "db-studio": "npx prisma studio",
-    "db-seed": "npx tsx ./src/lib/db/seed.ts",
     "prepare": "husky install"
   },
   "dependencies": {

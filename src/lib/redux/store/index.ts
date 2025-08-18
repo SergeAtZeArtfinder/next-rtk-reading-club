@@ -1,5 +1,5 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit"
-import { createWrapper } from "next-redux-wrapper"
+
 import { exampleSlice } from "../slices/exampleSlice"
 
 /**
@@ -12,16 +12,11 @@ const rootReducer = combineReducers({
 /**
  *  Function to create the store (required by createWrapper)
  */
-const makeStore = () => {
+export const makeStore = () => {
   return configureStore({
     reducer: rootReducer,
   })
 }
-
-/**
- * Create the wrapper
- */
-export const wrapper = createWrapper(makeStore)
 
 /**
  * Export types for store and dispatch

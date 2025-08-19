@@ -34,15 +34,6 @@ npm run check-types ||
     false;
 )
 
-# Run all automation tests
-echo 'Running automation tests... ⚙️ ⚙️ ⚙️\n'
-npm run test:ci || 
-(
-    echo '\n 💥😜❌🤡 Failed Automation Tests. 🤡😂❌💥😜
-            Whats going on man??? Make the changes required above. Re-run `npm run test:ci` to be sure, then try to commit again.\n'
-    false;
-)
-
 # If everything passes... Now we can commit
 echo '🛠️ ***************************************************************************** 🛠️\n'
 

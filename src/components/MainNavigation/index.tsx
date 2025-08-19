@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/react"
 
 import { paths } from "@/lib/utils"
+import Flame from "./Flame"
 
 const MainNavigation = (): JSX.Element => {
   return (
@@ -24,9 +25,8 @@ const MainNavigation = (): JSX.Element => {
         justify="center"
         aria-label="Main navigation page links"
       >
-        <NavbarItem aria-label="Home page link">
-          {" "}
-          🔥 Redux Toolkit POC
+        <NavbarItem aria-label="Home page link" className="flex gap-6">
+          <Flame /> Redux Toolkit POC
         </NavbarItem>
       </NavbarContent>
     </Navbar>

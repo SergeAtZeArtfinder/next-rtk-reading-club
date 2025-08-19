@@ -24,7 +24,10 @@ const MainNavigation = (): JSX.Element => {
         justify="center"
         aria-label="Main navigation page links"
       >
-        <NavbarItem aria-label="Home page link">Redux Toolkit POC</NavbarItem>
+        <NavbarItem aria-label="Home page link">
+          {" "}
+          🔥 Redux Toolkit POC
+        </NavbarItem>
       </NavbarContent>
     </Navbar>
   )

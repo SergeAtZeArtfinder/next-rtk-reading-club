@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-import type { Post } from "@/types"
-
-type Status = "idle" | "loading" | "succeeded" | "failed"
+import type { Post, Status } from "@/types"
 
 interface PostsState {
   items: Post[]

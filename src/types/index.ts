@@ -28,3 +28,5 @@ export interface User {
     bs: string
   }
 }
+
+export type Status = "idle" | "loading" | "succeeded" | "failed"

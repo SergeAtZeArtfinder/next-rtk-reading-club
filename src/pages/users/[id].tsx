@@ -1,5 +1,6 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Head from "next/head"
+import { useRouter } from "next/router"
 
 import type { NextPage, GetServerSideProps } from "next"
 import type { ParsedUrlQuery } from "querystring"
@@ -15,14 +16,12 @@ interface Params extends ParsedUrlQuery {
 interface PageProps {}
 
 const UserPage: NextPage<PageProps> = () => {
-  const user = useAppSelector((s) => {
-    // grab first user found in URL param via hydration
-    // this page doesn't need to know the ID on the client if server preloaded it
-    const ids = Object.keys(s.users.byId)
-    return ids.length ? s.users.byId[Number(ids[0])] : undefined
-  })
+  const router = useRouter()
 
-  if (!user) return <p className="p-6">Loading…</p>
+  const userId = router.query.id as string
+  const user = useAppSelector((s) => {
+    return s.users.byId[parseInt(userId, 10)] || undefined
+  })
 
   return (
     <>
@@ -33,9 +32,15 @@ const UserPage: NextPage<PageProps> = () => {
       </Head>
 
       <main>
-        <h1>User {user.id}</h1>
-        <div>Name: {user.name}</div>
-        <div>Email: {user.email}</div>
+        {user ? (
+          <>
+            <h1>User {user.id}</h1>
+            <div>Name: {user.name}</div>
+            <div>Email: {user.email}</div>
+          </>
+        ) : (
+          <p className="p-6">Loading…</p>
+        )}
       </main>
     </>
   )

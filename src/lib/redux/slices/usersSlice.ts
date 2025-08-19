@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-import type { User } from "@/types"
-
-type Status = "idle" | "loading" | "succeeded" | "failed"
+import type { User, Status } from "@/types"
 
 interface UsersState {
   byId: Record<number, User>
